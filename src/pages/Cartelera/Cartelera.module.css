@@ -1,0 +1,280 @@
+/* Destacado ------------------------------------------------------------------ */
+.destacado {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--espacio-6) var(--espacio-7);
+  background:
+    radial-gradient(ellipse at 80% 20%, var(--color-velo-primario), transparent 60%),
+    linear-gradient(to bottom, var(--color-superficie), var(--color-fondo));
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.destacadoContenido {
+  display: grid;
+  gap: var(--espacio-6);
+  align-items: center;
+}
+
+.destacadoTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.antetitulo {
+  color: var(--color-acento);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.destacadoTitulo {
+  font-size: var(--titulo-lg);
+}
+
+.destacadoMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.destacadoSinopsis {
+  max-width: 55ch;
+  font-size: var(--texto-lg);
+}
+
+.destacadoDirector {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+  margin-bottom: var(--espacio-2);
+}
+
+.destacadoPoster {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .destacadoContenido {
+    grid-template-columns: 1fr 260px;
+  }
+
+  .destacadoPoster {
+    display: flex;
+    box-shadow: var(--sombra-2);
+    transform: rotate(2deg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .destacadoContenido {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+/* Secciones ------------------------------------------------------------------ */
+.secciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+  margin-top: var(--espacio-6);
+}
+
+.cabeceraSeccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-4);
+  margin-bottom: var(--espacio-4);
+}
+
+.tituloSeccion {
+  font-size: var(--titulo-md);
+}
+
+.contador {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.verTodas {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--area-tactil);
+  font-weight: 600;
+}
+
+/* Grillas: 2 columnas en celular, hasta 5 en pantallas grandes */
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-3);
+}
+
+@media (min-width: 768px) {
+  .grilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grilla {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1440px) {
+  .grilla {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.grillaPromos {
+  display: grid;
+  gap: var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .grillaPromos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Filtros ---------------------------------------------------------------------- */
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+}
+
+.limpiar {
+  align-self: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .filtros {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: var(--espacio-6);
+  }
+
+  .limpiar {
+    align-self: flex-end;
+  }
+}
+
+/* Buscador --------------------------------------------------------------------- */
+.buscador {
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+}
+
+.buscador .tituloSeccion {
+  font-size: var(--titulo-sm);
+  margin-bottom: var(--espacio-4);
+}
+
+.formBuscador {
+  display: grid;
+  gap: var(--espacio-4);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .formBuscador {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .formBuscador {
+    grid-template-columns: 2fr 1.5fr 1.2fr auto;
+  }
+
+  /* Alinea el botón con los campos (que tienen etiqueta arriba) */
+  .botonBuscar {
+    margin-top: 1.6rem;
+  }
+}
+
+.resultados:not(:empty) {
+  margin-top: var(--espacio-5);
+}
+
+.resultadosCabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-3);
+}
+
+.listaFunciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.filaFuncion {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--espacio-2) var(--espacio-4);
+  padding: var(--espacio-3);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie-2);
+}
+
+.filaFuncion > :last-child {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+  .filaFuncion {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .filaFuncion > :last-child {
+    grid-column: auto;
+  }
+}
+
+.filaHora {
+  font-family: var(--fuente-display);
+  font-size: var(--titulo-sm);
+  color: var(--color-acento);
+}
+
+.filaDatos {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+.capitalizar::first-letter {
+  text-transform: uppercase;
+}
+
+/* Skeletons -------------------------------------------------------------------- */
+.destacadoSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding-block: var(--espacio-6);
+  margin-bottom: var(--espacio-6);
+}
+
+.posterSkeleton {
+  aspect-ratio: 2 / 3;
+  margin-bottom: var(--espacio-2);
+}

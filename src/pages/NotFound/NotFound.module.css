@@ -1,0 +1,24 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding-block: var(--espacio-8);
+  text-align: center;
+}
+
+.codigo {
+  font-family: var(--fuente-display);
+  font-size: clamp(6rem, 4rem + 10vw, 12rem);
+  line-height: 0.9;
+  color: var(--color-primario);
+}
+
+.titulo {
+  font-size: var(--titulo-md);
+}
+
+.texto {
+  max-width: 48ch;
+  color: var(--color-texto-suave);
+}
