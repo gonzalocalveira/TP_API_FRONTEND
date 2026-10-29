@@ -1,0 +1,107 @@
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.compra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  border: 1px solid var(--color-borde);
+  border-left: 4px solid var(--color-exito);
+  background: var(--color-superficie);
+}
+
+.compraCancelada {
+  border-left: 4px dashed var(--color-texto-suave);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.pelicula {
+  font-size: var(--titulo-sm);
+}
+
+.pelicula:focus-visible {
+  outline: 3px solid var(--color-foco);
+  outline-offset: 4px;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-3);
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .datos {
+    grid-template-columns: 2fr 1fr 1.5fr 1fr;
+  }
+}
+
+.datos dt {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.datos dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.capitalizar::first-letter {
+  text-transform: uppercase;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.nota {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.detalle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.detalle[hidden] {
+  display: none;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.tabla th,
+.tabla td {
+  padding: var(--espacio-2);
+  border-bottom: 1px solid var(--color-borde);
+  text-align: left;
+}
+
+.tabla th {
+  color: var(--color-texto-suave);
+  font-weight: 600;
+}

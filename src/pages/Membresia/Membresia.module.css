@@ -1,0 +1,132 @@
+.grilla {
+  display: grid;
+  gap: var(--espacio-6);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .grilla {
+    grid-template-columns: 1fr 1.3fr;
+  }
+}
+
+.tarjeta {
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+.titulo,
+.tituloClub {
+  font-size: var(--titulo-sm);
+  margin-bottom: var(--espacio-4);
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  margin: 0;
+}
+
+.datos dt {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.datos dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Carnet de socio: el tipo se lee como texto (CLASSIC, GOLD, BLACK), el color es solo decorativo */
+.carnet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  max-width: 440px;
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  border: 2px solid var(--color-borde-control);
+  background: linear-gradient(135deg, var(--color-superficie-3), var(--color-superficie));
+}
+
+.gold {
+  border-color: var(--color-acento);
+}
+
+.black {
+  border-color: var(--color-texto);
+}
+
+.carnetCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.carnetMarca {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-display);
+  font-size: var(--texto-xl);
+  letter-spacing: 0.05em;
+}
+
+.tipo {
+  padding: 2px var(--espacio-3);
+  border-radius: var(--radio-pill);
+  background: var(--color-acento);
+  color: var(--color-texto-sobre-acento);
+  font-weight: 700;
+  font-size: var(--texto-sm);
+  letter-spacing: 0.1em;
+}
+
+.puntos {
+  color: var(--color-texto-suave);
+}
+
+.puntos strong {
+  display: block;
+  font-family: var(--fuente-display);
+  font-size: var(--titulo-lg);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-texto);
+}
+
+.socio {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.subtitulo {
+  margin-block: var(--espacio-5) var(--espacio-3);
+  font-size: var(--texto-lg);
+}
+
+.beneficios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.beneficios li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+}
+
+.beneficios svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--color-exito);
+}
