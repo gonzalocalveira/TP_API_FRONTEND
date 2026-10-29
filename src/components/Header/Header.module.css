@@ -1,0 +1,143 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-fondo-header);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--alto-header);
+  gap: var(--espacio-4);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-display);
+  font-size: 1.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--color-texto);
+  text-decoration: none;
+  border-radius: var(--radio-sm);
+}
+
+.logo:hover {
+  color: var(--color-texto);
+}
+
+.logoIcono {
+  color: var(--color-primario);
+}
+
+.logoAcento {
+  color: var(--color-acento);
+}
+
+.botonMenu {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  min-height: var(--area-tactil);
+  padding: 0 var(--espacio-3);
+  border: 1px solid var(--color-borde-control);
+  border-radius: var(--radio-md);
+  background: transparent;
+  font-weight: 600;
+}
+
+.botonMenu:hover {
+  background: var(--color-superficie-2);
+}
+
+/* Celular: el menú es un panel que se abre debajo del header */
+.nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-4) var(--gutter) var(--espacio-5);
+  background: var(--color-fondo);
+  border-bottom: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-2);
+}
+
+.navAbierta {
+  display: flex;
+}
+
+.enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.enlace {
+  display: flex;
+  align-items: center;
+  min-height: var(--area-tactil);
+  padding: 0 var(--espacio-3);
+  border-radius: var(--radio-md);
+  color: var(--color-texto);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.enlace:hover {
+  background: var(--color-superficie-2);
+  color: var(--color-texto);
+}
+
+/* Página actual: color, subrayado y fondo */
+.enlace[aria-current='page'] {
+  color: var(--color-acento);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.sesion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.saludo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+@media (min-width: 1024px) {
+  .botonMenu {
+    display: none;
+  }
+
+  .nav {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espacio-5);
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .enlaces {
+    flex-direction: row;
+  }
+}
