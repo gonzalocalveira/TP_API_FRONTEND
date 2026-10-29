@@ -1,0 +1,150 @@
+/* Celular: barra fija abajo con el total y la acción principal; el detalle se despliega hacia arriba */
+.resumen {
+  position: fixed;
+  z-index: var(--z-barra-fija);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: var(--espacio-3) var(--gutter) var(--espacio-4);
+  background: var(--color-superficie);
+  border-top: 2px solid var(--color-borde-control);
+  box-shadow: var(--sombra-2);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+}
+
+.botonDetalle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  min-height: var(--area-tactil);
+  padding: 0 var(--espacio-2);
+  border: 0;
+  border-radius: var(--radio-sm);
+  background: transparent;
+  color: var(--color-acento);
+  font-weight: 600;
+  font-size: var(--texto-sm);
+  text-decoration: underline;
+}
+
+.flecha {
+  transform: rotate(90deg);
+}
+
+.detalle {
+  display: none;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.detalleAbierto {
+  display: flex;
+}
+
+.funcion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding-bottom: var(--espacio-3);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.pelicula {
+  font-weight: 700;
+  font-size: var(--texto-lg);
+}
+
+.dato {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-1);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+
+.lineas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin: 0;
+}
+
+.linea {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  font-size: var(--texto-sm);
+}
+
+.linea dt {
+  color: var(--color-texto-suave);
+}
+
+.linea dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.pie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: var(--texto-lg);
+}
+
+.total strong {
+  font-family: var(--fuente-display);
+  font-size: var(--titulo-sm);
+  font-weight: 400;
+  color: var(--color-acento);
+}
+
+/* Escritorio: panel lateral pegajoso con el detalle siempre visible */
+@media (min-width: 1024px) {
+  .resumen {
+    position: sticky;
+    top: calc(var(--alto-header) + var(--espacio-4));
+    max-height: none;
+    padding: var(--espacio-5);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+    box-shadow: none;
+  }
+
+  .botonDetalle {
+    display: none;
+  }
+
+  .detalle {
+    display: flex;
+  }
+
+  .pie {
+    padding-top: var(--espacio-3);
+    border-top: 1px solid var(--color-borde);
+  }
+}

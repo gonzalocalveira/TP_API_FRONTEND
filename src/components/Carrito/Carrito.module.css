@@ -1,0 +1,80 @@
+.carrito {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+}
+
+.vacio {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding-bottom: var(--espacio-3);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.itemTexto {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.nombre {
+  font-weight: 600;
+}
+
+.precio {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.itemAcciones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quitar {
+  display: grid;
+  place-items: center;
+  width: var(--area-tactil);
+  height: var(--area-tactil);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-texto-suave);
+}
+
+.quitar:hover {
+  background: var(--color-superficie-3);
+  color: var(--color-error);
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  font-size: var(--texto-sm);
+}
+
+.subtotal strong {
+  font-size: var(--texto-base);
+}

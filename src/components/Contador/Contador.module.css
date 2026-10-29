@@ -1,0 +1,28 @@
+.contador {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  border: 1px solid var(--color-borde-control);
+  border-radius: var(--radio-pill);
+}
+
+.boton {
+  display: grid;
+  place-items: center;
+  width: var(--area-tactil);
+  height: var(--area-tactil);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-texto);
+}
+
+.boton:hover {
+  background: var(--color-superficie-3);
+}
+
+.cantidad {
+  min-width: 2ch;
+  font-weight: 700;
+  text-align: center;
+}
