@@ -1,0 +1,42 @@
+.lista {
+  display: flex;
+  gap: var(--espacio-1);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-borde);
+  scrollbar-width: thin;
+}
+
+.tab {
+  flex-shrink: 0;
+  min-height: var(--area-tactil);
+  padding: var(--espacio-2) var(--espacio-4);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--color-texto-suave);
+  font-weight: 600;
+  transition: color var(--transicion), border-color var(--transicion);
+}
+
+.tab:hover {
+  color: var(--color-texto);
+  border-bottom-color: var(--color-borde-control);
+}
+
+.tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* La pestaña activa se distingue por color, peso y la línea inferior */
+.tab[aria-selected='true'] {
+  color: var(--color-texto);
+  border-bottom-color: var(--color-primario);
+}
+
+.panel {
+  padding-top: var(--espacio-4);
+}
+
+.panel:focus-visible {
+  outline-offset: 4px;
+}

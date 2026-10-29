@@ -14,6 +14,7 @@
   --color-texto: #f5f5f7;
   --color-texto-suave: #b4b4be;
   --color-texto-sobre-acento: #0b0b10;
+  --color-texto-sobre-primario: #ffffff;
 
   /* Acción y acento */
   --color-primario: #d11a2a;
@@ -27,10 +28,42 @@
   --color-exito: #4ade80;
   --color-info: #7cc4ff;
 
+  /* Transparencias */
+  --color-fondo-header: rgb(11 11 16 / 0.92);
+  --color-velo-modal: rgb(0 0 0 / 0.7);
+  --color-velo-primario: rgb(209 26 42 / 0.25);
+  --color-sombra-texto: rgb(0 0 0 / 0.6);
+
   /* Bordes */
   --color-borde: #34343f;
   --color-borde-control: #6b6b78;
   --color-foco: #ffc233;
+
+  /* Paletas de los pósters ilustrados (decorativos: el título real va como texto aparte) */
+  --poster-1-a: #1b2a6b;
+  --poster-1-b: #07091c;
+  --poster-1-c: #ffb547;
+  --poster-2-a: #6b1b3a;
+  --poster-2-b: #12060c;
+  --poster-2-c: #ff7a90;
+  --poster-3-a: #0f5a52;
+  --poster-3-b: #041714;
+  --poster-3-c: #8ef0d0;
+  --poster-4-a: #7a4a0c;
+  --poster-4-b: #1a0f03;
+  --poster-4-c: #ffd88a;
+  --poster-5-a: #3d1f6e;
+  --poster-5-b: #0c0618;
+  --poster-5-c: #c9a6ff;
+  --poster-6-a: #0f3d66;
+  --poster-6-b: #030c16;
+  --poster-6-c: #7cc4ff;
+  --poster-7-a: #6e2a12;
+  --poster-7-b: #160803;
+  --poster-7-c: #ff9b5e;
+  --poster-8-a: #2a4d1a;
+  --poster-8-b: #071204;
+  --poster-8-c: #c3f08a;
 
   /* Tipografía */
   --fuente-display: 'Bebas Neue', 'Arial Narrow', Impact, sans-serif;
