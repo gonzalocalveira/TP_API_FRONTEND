@@ -17,5 +17,9 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // Permite sacar un campo de un objeto con destructuring: const { password, ...resto } = usuario
+      'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    },
   },
 ])
