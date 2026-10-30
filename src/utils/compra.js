@@ -39,10 +39,6 @@ export function agruparPorFormato(funciones) {
   return grupos
 }
 
-export function precioDesde(funciones) {
-  return Math.min(...funciones.map((f) => f.precio))
-}
-
 export function ordenarPorFechaYHora(funciones) {
   return [...funciones].sort((a, b) => inicioFuncion(a) - inicioFuncion(b))
 }

@@ -9,7 +9,7 @@ import { useAsync } from '../../hooks/useAsync.js'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { getPelicula, getFunciones } from '../../services/api.js'
 import { funcionesVigentes } from '../../utils/cartelera.js'
-import { agruparPorFormato, precioDesde } from '../../utils/compra.js'
+import { agruparPorFormato } from '../../utils/compra.js'
 import {
   describirDia,
   etiquetaDiaCompleta,
@@ -153,7 +153,6 @@ function FichaPelicula({ pelicula, funciones }) {
                     <h3 id={`formato-${formato}`} className={estilos.formato}>
                       {etiquetaFormato(formato)}
                     </h3>
-                    <p className={estilos.desde}>Desde {formatearPrecio(precioDesde(grupos[formato]))}</p>
                   </div>
                   <ul className={estilos.horarios}>
                     {grupos[formato].map((funcion) => (
@@ -161,7 +160,8 @@ function FichaPelicula({ pelicula, funciones }) {
                         <Link
                           to={`/compra/${funcion.id}/butacas`}
                           className={estilos.horario}
-                          aria-label={`${formatearHora(funcion.horaFuncion)} h, ${funcion.salaNombre}, ${etiquetaFormato(formato)}, ${formatearPrecio(funcion.precio)}. Elegir butacas`}
+                          // El precio aparece una sola vez, en cada función; el aria-label la describe completa.
+                          aria-label={`${formatearHora(funcion.horaFuncion)}, ${funcion.salaNombre}, ${etiquetaFormato(formato)}, ${formatearPrecio(funcion.precio)}`}
                         >
                           <span className={estilos.hora}>{formatearHora(funcion.horaFuncion)}</span>
                           <span className={estilos.sala}>{funcion.salaNombre}</span>

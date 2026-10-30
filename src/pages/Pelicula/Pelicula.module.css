@@ -141,11 +141,6 @@
   letter-spacing: 0.04em;
 }
 
-.desde {
-  color: var(--color-texto-suave);
-  font-size: var(--texto-sm);
-}
-
 .horarios {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -176,8 +171,13 @@
   line-height: 1.1;
 }
 
-.sala,
-.precio {
+.sala {
   color: var(--color-texto-suave);
   font-size: var(--texto-xs);
+}
+
+.precio {
+  color: var(--color-acento);
+  font-size: var(--texto-sm);
+  font-weight: 700;
 }
