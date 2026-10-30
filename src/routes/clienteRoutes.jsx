@@ -16,6 +16,7 @@ import Ingresar from '../pages/Ingresar/Ingresar.jsx'
 import Registro from '../pages/Registro/Registro.jsx'
 import MisCompras from '../pages/MisCompras/MisCompras.jsx'
 import Membresia from '../pages/Membresia/Membresia.jsx'
+import AcercaDe from '../pages/AcercaDe/AcercaDe.jsx'
 import NotFound from '../pages/NotFound/NotFound.jsx'
 
 export const clienteRoutes = [
@@ -27,6 +28,7 @@ export const clienteRoutes = [
       { path: 'peliculas/:id', element: <Pelicula /> },
       { path: 'promociones', element: <Promociones /> },
       { path: 'candy', element: <CandyMenu /> },
+      { path: 'acerca-de', element: <AcercaDe /> },
       { path: 'ingresar', element: <Ingresar /> },
       { path: 'registro', element: <Registro /> },
       {

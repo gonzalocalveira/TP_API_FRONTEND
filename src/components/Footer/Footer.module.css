@@ -62,3 +62,19 @@
   color: var(--color-texto-suave);
   font-size: var(--texto-xs);
 }
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-5);
+}
+
+.acercaDe {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--area-tactil);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}

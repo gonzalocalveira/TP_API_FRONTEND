@@ -71,10 +71,15 @@ export default function Footer() {
           </section>
         )}
       </div>
-      <p className={`contenedor ${estilos.legal}`}>
-        Cine ficticio. Proyecto académico de Aplicaciones Interactivas, UADE, 2026. Las películas nuevas, los precios y las
-        promociones son inventados.
-      </p>
+      <div className={`contenedor ${estilos.legal}`}>
+        <p>
+          Cine ficticio. Proyecto académico de Aplicaciones Interactivas, UADE, 2026. Las películas nuevas, los precios y las
+          promociones son inventados.
+        </p>
+        <Link to="/acerca-de" className={estilos.acercaDe}>
+          Acerca de
+        </Link>
+      </div>
 
       <ConfirmDialog
         abierto={confirmando}
