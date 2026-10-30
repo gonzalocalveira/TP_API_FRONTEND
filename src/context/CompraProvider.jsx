@@ -3,7 +3,7 @@ import { CompraContext } from './CompraContext.js'
 import { leerJSON, guardarJSON } from '../utils/almacenamiento.js'
 import { MAX_BUTACAS } from '../utils/compra.js'
 
-const CLAVE = 'linterna-compra'
+const CLAVE = 'cmp-compra'
 
 const compraVacia = {
   funcion: null, // FuncionDTO elegida

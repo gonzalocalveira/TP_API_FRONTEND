@@ -67,7 +67,7 @@ export default function Membresia() {
 
         <section aria-labelledby="club-titulo">
           <h2 id="club-titulo" className={estilos.tituloClub}>
-            Club Linterna
+            Club CineManagerPro
           </h2>
           {cargando && (
             <Cargando texto="Cargando tu membresía...">
@@ -78,7 +78,7 @@ export default function Membresia() {
           {!cargando && !error && membresia === null && (
             <EmptyState
               icono="estrella"
-              titulo="Todavía no sos parte del Club Linterna"
+              titulo="Todavía no sos parte del Club CineManagerPro"
               descripcion="Los socios suman puntos con cada entrada y tienen promociones exclusivas. Para asociarte, acercate a la boletería con tu DNI: es gratis."
               nivelTitulo={3}
             >
@@ -91,7 +91,7 @@ export default function Membresia() {
             <div className={`${estilos.carnet} ${estilos[membresia.tipoMembresia.toLowerCase()]}`}>
               <div className={estilos.carnetCabecera}>
                 <p className={estilos.carnetMarca}>
-                  <Icon nombre="linterna" tamano={22} /> Club Linterna
+                  <Icon nombre="claqueta" tamano={22} /> Club CineManagerPro
                 </p>
                 <p className={estilos.tipo}>{membresia.tipoMembresia}</p>
               </div>

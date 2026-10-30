@@ -12,7 +12,7 @@ export const categoriasCandy = [
 export const productosCandy = [
   { id: 1, categoria: 'COMBOS', nombre: 'Combo Clásico', descripcion: 'Pochoclo mediano + gaseosa mediana.', precio: 6800 },
   { id: 2, categoria: 'COMBOS', nombre: 'Combo Pareja', descripcion: 'Pochoclo grande + 2 gaseosas medianas.', precio: 10500 },
-  { id: 3, categoria: 'COMBOS', nombre: 'Combo Linterna', descripcion: 'Pochoclo grande, 2 gaseosas grandes y nachos con cheddar.', precio: 15900 },
+  { id: 3, categoria: 'COMBOS', nombre: 'Combo Mega', descripcion: 'Pochoclo grande, 2 gaseosas grandes y nachos con cheddar.', precio: 15900 },
   { id: 4, categoria: 'POCHOCLOS', nombre: 'Pochoclo chico', descripcion: 'Dulce o salado.', precio: 3200 },
   { id: 5, categoria: 'POCHOCLOS', nombre: 'Pochoclo mediano', descripcion: 'Dulce o salado.', precio: 4300 },
   { id: 6, categoria: 'POCHOCLOS', nombre: 'Pochoclo grande', descripcion: 'Dulce, salado o mixto.', precio: 5400 },

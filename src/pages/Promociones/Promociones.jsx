@@ -18,7 +18,7 @@ export default function Promociones() {
     <div className="contenedor">
       <EncabezadoPagina
         titulo="Promociones"
-        descripcion="Beneficios vigentes en Linterna Cines. Se aplican en la boletería o en el mostrador del candy, no en la compra online."
+        descripcion="Beneficios vigentes en CineManagerPro. Se aplican en la boletería o en el mostrador del candy, no en la compra online."
       >
         <Button to="/">Ver la cartelera</Button>
       </EncabezadoPagina>

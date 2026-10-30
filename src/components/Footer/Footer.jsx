@@ -31,7 +31,7 @@ export default function Footer() {
       <div className={`contenedor ${estilos.grilla}`}>
         <section aria-labelledby="footer-marca">
           <h2 id="footer-marca" className={estilos.marca}>
-            Linterna <span className={estilos.acento}>Cines</span>
+            CineManager<span className={estilos.acento}>Pro</span>
           </h2>
           <p className={estilos.texto}>Av. de los Proyectores 1895, CABA.</p>
           <p className={estilos.texto}>Boletería abierta todos los días de 12 a 24 h.</p>

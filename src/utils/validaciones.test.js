@@ -38,7 +38,7 @@ verificar(!puedeCancelarse({ estado: 'CONFIRMADA', fechaFuncion: '2026-10-28', h
 
 verificar(listarButacas([{ filaAsiento: 'A', numeroAsiento: 1 }, { filaAsiento: 'A', numeroAsiento: 2 }, { filaAsiento: 'B', numeroAsiento: 4 }]) === 'A1, A2 y B4', 'Lista de butacas')
 verificar(formatearDuracion(169) === '2 h 49 min', 'Duración')
-verificar(codigoReserva(12) === 'LC-000012', 'Código de reserva')
+verificar(codigoReserva(12) === 'CMP-000012', 'Código de reserva')
 
 if (fallas > 0) {
   throw new Error(`${fallas} verificación(es) fallaron`)

@@ -22,7 +22,7 @@ export default function PosterArt({ pelicula, tamano = 'normal', className = '' 
     <div className={`${estilos.poster} ${estilos[paleta]} ${estilos[tamano]} ${className}`} aria-hidden="true">
       <span className={`${estilos.motivo} ${estilos[motivo]}`} />
       <span className={estilos.titulo}>{pelicula.nombre}</span>
-      <span className={estilos.pie}>Linterna Cines</span>
+      <span className={estilos.pie}>CineManagerPro</span>
     </div>
   )
 }

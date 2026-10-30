@@ -6,7 +6,7 @@ export const promociones = [
   {
     id: 1,
     titulo: 'Martes 2x1',
-    descripcion: 'Todos los martes, dos entradas 2D al precio de una para socios del Club Linterna.',
+    descripcion: 'Todos los martes, dos entradas 2D al precio de una para socios del Club CineManagerPro.',
     condiciones: 'Válido solo en boletería presentando DNI. No acumulable con otras promociones.',
     destacada: true,
   },
@@ -26,7 +26,7 @@ export const promociones = [
   },
   {
     id: 4,
-    titulo: 'Club Linterna GOLD',
+    titulo: 'Club CineManagerPro GOLD',
     descripcion: 'Los socios GOLD y BLACK suman el doble de puntos con cada entrada.',
     condiciones: 'Los puntos se acreditan dentro de las 48 h posteriores a la función.',
     destacada: false,

@@ -23,7 +23,7 @@ export default function Cartelera() {
 
   return (
     <>
-      <h1 className="visually-hidden">Linterna Cines: cartelera y venta de entradas</h1>
+      <h1 className="visually-hidden">CineManagerPro: cartelera y venta de entradas</h1>
       {cargando && <CarteleraCargando />}
       {error && (
         <div className="contenedor">

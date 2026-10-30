@@ -3,7 +3,7 @@ import { AuthContext } from './AuthContext.js'
 import { login, registrar } from '../services/api.js'
 import { leerJSON, guardarJSON, borrarClave } from '../utils/almacenamiento.js'
 
-const CLAVE = 'linterna-sesion'
+const CLAVE = 'cmp-sesion'
 
 // Sesión simulada: se guarda el usuario que devolvió el login (sin password) en localStorage.
 // Con un back-end con seguridad real acá se guardaría un token.

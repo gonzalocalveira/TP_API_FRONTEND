@@ -50,9 +50,9 @@ export default function Header() {
     <header className={estilos.header}>
       <div className={`contenedor ${estilos.barra}`}>
         <Link to="/" className={estilos.logo} onClick={cerrarMenu}>
-          <Icon nombre="linterna" tamano={28} className={estilos.logoIcono} />
+          <Icon nombre="claqueta" tamano={28} className={estilos.logoIcono} />
           <span>
-            Linterna <span className={estilos.logoAcento}>Cines</span>
+            CineManager<span className={estilos.logoAcento}>Pro</span>
           </span>
         </Link>
 

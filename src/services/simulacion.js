@@ -6,7 +6,7 @@
 // También se puede activar con la variable de entorno VITE_SIMULAR_ERRORES=true (equivale a ?error=1).
 import { leerJSON, guardarJSON, borrarClave } from '../utils/almacenamiento.js'
 
-const CLAVE = 'linterna-modo-error'
+const CLAVE = 'cmp-modo-error'
 
 export const MODOS_ERROR = {
   NINGUNO: 'ninguno',

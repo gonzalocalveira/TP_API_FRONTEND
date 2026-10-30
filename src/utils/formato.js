@@ -105,9 +105,9 @@ export function formatearDuracion(minutos) {
   return resto === 0 ? `${horas} h` : `${horas} h ${resto} min`
 }
 
-// Código de reserva legible a partir del id de la compra: 12 -> "LC-000012"
+// Código de reserva legible a partir del id de la compra: 12 -> "CMP-000012"
 export function codigoReserva(compraId) {
-  return `LC-${String(compraId).padStart(6, '0')}`
+  return `CMP-${String(compraId).padStart(6, '0')}`
 }
 
 // Une una lista de butacas en texto: "A1, A2 y B4"

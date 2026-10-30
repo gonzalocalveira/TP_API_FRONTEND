@@ -4,7 +4,7 @@
 // así se puede probar que "otra persona" compró una butaca desde otra pestaña.
 import { leerJSON, guardarJSON, borrarClave } from '../utils/almacenamiento.js'
 
-const CLAVE = 'linterna-db-v1'
+const CLAVE = 'cmp-db-v1'
 
 const estadoInicial = {
   compras: [],

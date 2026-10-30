@@ -69,7 +69,12 @@ const trazos = {
   ojoTachado: (
     <path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.7M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7a9.6 9.6 0 0 0 4.4-1M9.9 9.9a3 3 0 0 0 4.2 4.2" />
   ),
-  linterna: <path d="M9 2h6v3H9zM7 6h10l-2 9H9zM12 9v3M10 15h4v7h-4z" />,
+  claqueta: (
+    <>
+      <path d="M3 10h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+      <path d="M3 10l1.2-5.2a1 1 0 0 1 1.2-.75l14.6 3.4L19.5 10M8.5 4.9l2 4.1M13.5 6l2 4" />
+    </>
+  ),
 }
 
 export default function Icon({ nombre, tamano = 20, titulo, className }) {
