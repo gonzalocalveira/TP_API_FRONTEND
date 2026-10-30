@@ -36,11 +36,12 @@ export function filtrarPeliculas(peliculas, funciones, { formatos = [], dia = nu
   )
 }
 
-// Estreno destacado: la película en cartelera estrenada más recientemente que tenga funciones.
-export function elegirDestacada(enCartelera, funciones) {
+// Destacadas del carrusel: las películas en cartelera estrenadas más recientemente que tengan funciones.
+export function elegirDestacadas(enCartelera, funciones, cantidad = 5) {
   return [...enCartelera]
     .filter((p) => funciones.some((f) => f.peliculaId === p.id))
-    .sort((a, b) => b.fechaEstreno.localeCompare(a.fechaEstreno))[0]
+    .sort((a, b) => b.fechaEstreno.localeCompare(a.fechaEstreno))
+    .slice(0, cantidad)
 }
 
 export const FRANJAS_HORARIAS = {

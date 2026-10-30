@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Destacado from './Destacado.jsx'
+import Carrusel from '../../components/Carrusel/Carrusel.jsx'
 import BuscadorFunciones from './BuscadorFunciones.jsx'
 import PosterCard from '../../components/PosterCard/PosterCard.jsx'
 import PromoCard from '../../components/PromoCard/PromoCard.jsx'
@@ -10,7 +10,7 @@ import { Cargando, Skeleton, ErrorState, EmptyState } from '../../components/Est
 import { useAsync } from '../../hooks/useAsync.js'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { getPeliculas, getFunciones, getPromociones } from '../../services/api.js'
-import { separarCartelera, funcionesVigentes, formatosDePelicula, filtrarPeliculas, elegirDestacada } from '../../utils/cartelera.js'
+import { separarCartelera, funcionesVigentes, formatosDePelicula, filtrarPeliculas, elegirDestacadas } from '../../utils/cartelera.js'
 import { FORMATOS, etiquetaFormato, proximosDias, describirDia, formatearFechaLarga } from '../../utils/formato.js'
 import estilos from './Cartelera.module.css'
 
@@ -41,7 +41,8 @@ function CarteleraContenido({ peliculas, funciones, promociones }) {
 
   const vigentes = funcionesVigentes(funciones)
   const { enCartelera, proximamente } = separarCartelera(peliculas)
-  const destacada = elegirDestacada(enCartelera, vigentes)
+  const destacadas = elegirDestacadas(enCartelera, vigentes)
+  const formatosPorPelicula = Object.fromEntries(enCartelera.map((p) => [p.id, formatosDePelicula(vigentes, p.id)]))
   const filtradas = filtrarPeliculas(enCartelera, vigentes, { formatos, dia })
   const hayFiltros = formatos.length > 0 || dia !== null
 
@@ -68,7 +69,7 @@ function CarteleraContenido({ peliculas, funciones, promociones }) {
 
   return (
     <>
-      {destacada && <Destacado pelicula={destacada} formatos={formatosDePelicula(vigentes, destacada.id)} />}
+      {destacadas.length > 0 && <Carrusel peliculas={destacadas} formatosPorPelicula={formatosPorPelicula} />}
 
       <div className={`contenedor ${estilos.secciones}`}>
         <BuscadorFunciones peliculas={enCartelera} />
@@ -102,7 +103,7 @@ function CarteleraContenido({ peliculas, funciones, promociones }) {
             <ul className={estilos.grilla}>
               {filtradas.map((pelicula) => (
                 <li key={pelicula.id}>
-                  <PosterCard pelicula={pelicula} formatos={formatosDePelicula(vigentes, pelicula.id)} />
+                  <PosterCard pelicula={pelicula} formatos={formatosPorPelicula[pelicula.id]} />
                 </li>
               ))}
             </ul>

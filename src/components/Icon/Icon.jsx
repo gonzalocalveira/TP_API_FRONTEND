@@ -69,6 +69,8 @@ const trazos = {
   ojoTachado: (
     <path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.7M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7a9.6 9.6 0 0 0 4.4-1M9.9 9.9a3 3 0 0 0 4.2 4.2" />
   ),
+  pausa: <path d="M8 5v14M16 5v14" />,
+  reproducir: <path d="M7 4l13 8-13 8z" />,
   claqueta: (
     <>
       <path d="M3 10h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
