@@ -1,14 +1,17 @@
 // Películas con la misma forma que el DTO del back-end (GET /api/peliculas y /api/clientes/cartelera).
 // Los ids 1 a 4 son las mismas películas de database/02_datos.sql.
 // Los ids 5 a 10 son ficticios y existen solo en el mock, para que la cartelera luzca completa.
+// posterUrl y bannerUrl NO existen en el back-end (habría que agregarlos): acá se completan con las imágenes
+// que haya en src/assets/img/peliculas, o null si todavía no se cargó el archivo.
 import { aFechaISO, sumarDias } from '../utils/formato.js'
+import { urlPoster, urlBanner } from '../utils/imagenes.js'
 
 const hoy = new Date()
 // Fechas relativas a hoy: las 3 últimas se estrenan en el futuro y alimentan "Próximamente".
 const haceDias = (dias) => aFechaISO(sumarDias(hoy, -dias))
 const enDias = (dias) => aFechaISO(sumarDias(hoy, dias))
 
-export const peliculas = [
+const datos = [
   {
     id: 1,
     nombre: 'Interstellar',
@@ -120,3 +123,9 @@ export const peliculas = [
     sinopsis: 'Un grupo de amigos se queda encerrado en un parque de diversiones abandonado de la costa bonaerense.',
   },
 ]
+
+export const peliculas = datos.map((pelicula) => ({
+  ...pelicula,
+  posterUrl: urlPoster(pelicula.id),
+  bannerUrl: urlBanner(pelicula.id),
+}))

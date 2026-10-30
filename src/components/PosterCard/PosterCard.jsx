@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import PosterArt from '../PosterArt/PosterArt.jsx'
+import PosterImagen from '../PosterImagen/PosterImagen.jsx'
 import { Clasificacion, Formato } from '../Etiquetas/Etiquetas.jsx'
 import { formatearDuracion } from '../../utils/formato.js'
 import estilos from './PosterCard.module.css'
@@ -10,7 +10,7 @@ export default function PosterCard({ pelicula, formatos = [], detalle, nivelTitu
   const Titulo = `h${nivelTitulo}`
   return (
     <article className={estilos.tarjeta}>
-      <PosterArt pelicula={pelicula} />
+      <PosterImagen pelicula={pelicula} />
       <div className={estilos.cuerpo}>
         <Titulo className={estilos.titulo}>
           <Link to={`/peliculas/${pelicula.id}`} className={estilos.enlace}>

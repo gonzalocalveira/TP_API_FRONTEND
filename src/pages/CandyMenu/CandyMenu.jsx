@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import EncabezadoPagina from '../../components/EncabezadoPagina/EncabezadoPagina.jsx'
 import CatalogoCandy from '../../components/CatalogoCandy/CatalogoCandy.jsx'
+import ImagenAmbiente from '../../components/ImagenAmbiente/ImagenAmbiente.jsx'
 import Button from '../../components/Button/Button.jsx'
 import { Cargando, Skeleton, ErrorState } from '../../components/Estados/Estados.jsx'
 import { useAsync } from '../../hooks/useAsync.js'
@@ -23,6 +24,7 @@ export default function CandyMenu() {
       >
         <Button to="/">Comprá entradas</Button>
       </EncabezadoPagina>
+      <ImagenAmbiente nombre="pochoclos" className={estilos.ambiente} />
       {cargando && (
         <Cargando texto="Cargando el menú...">
           <div className={estilos.skeletons}>

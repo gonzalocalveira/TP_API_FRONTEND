@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import PosterArt from '../../components/PosterArt/PosterArt.jsx'
+import PosterImagen from '../../components/PosterImagen/PosterImagen.jsx'
 import FiltroChips from '../../components/FiltroChips/FiltroChips.jsx'
 import Button from '../../components/Button/Button.jsx'
 import { Clasificacion } from '../../components/Etiquetas/Etiquetas.jsx'
@@ -89,7 +89,7 @@ function FichaPelicula({ pelicula, funciones }) {
       </nav>
 
       <article className={estilos.ficha}>
-        <PosterArt pelicula={pelicula} tamano="grande" className={estilos.poster} />
+        <PosterImagen pelicula={pelicula} tamano="grande" prioridad className={estilos.poster} />
         <div className={estilos.info}>
           <h1 className={estilos.titulo}>{pelicula.nombre}</h1>
           <p className={estilos.meta}>

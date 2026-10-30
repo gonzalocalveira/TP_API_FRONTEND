@@ -4,6 +4,7 @@ import EncabezadoPagina from '../../components/EncabezadoPagina/EncabezadoPagina
 import CatalogoCandy from '../../components/CatalogoCandy/CatalogoCandy.jsx'
 import Carrito from '../../components/Carrito/Carrito.jsx'
 import ResumenCompra from '../../components/ResumenCompra/ResumenCompra.jsx'
+import ImagenAmbiente from '../../components/ImagenAmbiente/ImagenAmbiente.jsx'
 import Button from '../../components/Button/Button.jsx'
 import { Cargando, Skeleton, ErrorState } from '../../components/Estados/Estados.jsx'
 import { useAsync } from '../../hooks/useAsync.js'
@@ -33,6 +34,7 @@ export default function Candy() {
 
       <div className={estilosCompra.grilla}>
         <div className={estilosCompra.principal}>
+          <ImagenAmbiente nombre="candy" />
           <section aria-labelledby="catalogo-titulo">
             <h2 id="catalogo-titulo" className="visually-hidden">
               Productos

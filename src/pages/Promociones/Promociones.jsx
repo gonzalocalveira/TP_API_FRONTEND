@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import EncabezadoPagina from '../../components/EncabezadoPagina/EncabezadoPagina.jsx'
 import PromoCard from '../../components/PromoCard/PromoCard.jsx'
+import ImagenAmbiente from '../../components/ImagenAmbiente/ImagenAmbiente.jsx'
 import Button from '../../components/Button/Button.jsx'
 import { Cargando, Skeleton, ErrorState } from '../../components/Estados/Estados.jsx'
 import { useAsync } from '../../hooks/useAsync.js'
@@ -22,6 +23,7 @@ export default function Promociones() {
       >
         <Button to="/">Ver la cartelera</Button>
       </EncabezadoPagina>
+      <ImagenAmbiente nombre="butacas" className={estilos.ambiente} />
       {cargando && (
         <Cargando texto="Cargando promociones...">
           <div className={estilos.grilla}>
