@@ -65,8 +65,8 @@ Las rutas de compra están anidadas dentro de `CompraLayout` (comparten el stepp
 
 | Context | Provider | Hook | Qué guarda | Persistencia |
 |---|---|---|---|---|
-| `AuthContext` | `AuthProvider.jsx` | `useAuth()` | `usuario` y las funciones `iniciarSesion`, `registrarse`, `cerrarSesion` | `localStorage` (`linterna-sesion`) |
-| `CompraContext` | `CompraProvider.jsx` | `useCompra()` | `funcion`, `butacas`, `candy`, `ultimaCompra` y las acciones para cambiarlos | `sessionStorage` (`linterna-compra`) |
+| `AuthContext` | `AuthProvider.jsx` | `useAuth()` | `usuario` y las funciones `iniciarSesion`, `registrarse`, `cerrarSesion` | `localStorage` (`cmp-sesion`) |
+| `CompraContext` | `CompraProvider.jsx` | `useCompra()` | `funcion`, `butacas`, `candy`, `ultimaCompra` y las acciones para cambiarlos | `sessionStorage` (`cmp-compra`) |
 | `ToastContext` | `ToastProvider.jsx` | `useToast()` | Lista de notificaciones y `mostrarToast` | Ninguna |
 
 Cada context está separado en tres archivos (el objeto del context, el provider y el hook) porque ESLint, para que funcione la recarga en caliente de Vite, pide que un archivo `.jsx` exporte solo componentes.
