@@ -46,6 +46,7 @@ Página (pages/) ──> hook (useAsync) ──> services/api.js ──┬──
 | `/peliculas/:id` | `Pelicula` | Pública |
 | `/promociones` | `Promociones` | Pública |
 | `/candy` | `CandyMenu` (menú de precios) | Pública |
+| `/acerca-de` | `AcercaDe` (qué es, la materia y el equipo) | Pública |
 | `/ingresar`, `/registro` | `Ingresar`, `Registro` | Pública |
 | `/compra/:funcionId/butacas` | `Butacas` | Pública: se pueden elegir butacas sin sesión |
 | `/compra/candy` | `Candy` | `RequireCompra` |
@@ -79,6 +80,9 @@ Cada context está separado en tres archivos (el objeto del context, el provider
 | `useAsync(funcion)` | Ejecuta un pedido a la API y devuelve `{ datos, error, cargando, reintentar, actualizarDatos }`. La función va envuelta en `useCallback` y el pedido se repite cuando cambia. Ignora respuestas viejas si el componente cambió. | Todas las páginas que cargan datos |
 | `useFormulario(valoresIniciales, validar)` | Formulario controlado: valores, errores visibles (después de salir del campo o de intentar enviar) y `validarAlEnviar()` | Ingresar, Registro, Pago, Buscador |
 | `useDocumentTitle(titulo)` | Cambia el título de la pestaña | Todas las páginas |
+| `useCarrusel(cantidad)` | Slide actual, navegación y avance automático con su pausa | `Carrusel` |
+| `useCuentaRegresiva(vencimiento)` | Segundos que faltan, calculados como `vencimiento - ahora`, con un intervalo que se limpia | `TemporizadorCompra` |
+| `usePagoBilletera(idPago, onAprobado)` | Polling del estado del pago cada 2 segundos, con limpieza del intervalo | `Pago` |
 | `useAuth`, `useCompra`, `useToast` | Leen el context correspondiente | Varias |
 
 ## Capa de datos (`services/`)
@@ -97,7 +101,7 @@ Cada context está separado en tres archivos (el objeto del context, el provider
 1. **Ficha de película:** el horario es un link a `/compra/:funcionId/butacas`.
 2. **Butacas:** carga la función y el mapa (`getFuncion` + `getButacas`) y llama a `sincronizarFuncion` del `CompraContext`, que guarda la función y descarta las butacas elegidas que ahora figuran ocupadas. Cada click llama a `alternarButaca`, con un tope de 8.
 3. **Candy (opcional):** `agregarCandy`, `quitarUnCandy`, `eliminarCandy` y `vaciarCandy`. Se puede saltear.
-4. **Pago:** `RequireAuth` pide login si hace falta y después vuelve. Al enviar: se valida, se aprueba `procesarPago` (simulado), se llama a `comprar(...)` y se guarda el resultado con `finalizarCompra`.
+4. **Pago:** `RequireAuth` pide login si hace falta y después vuelve. Al enviar: se valida, se controla el tiempo, se aprueba el pago simulado (`procesarPago` con tarjeta, o `crearPagoBilletera` y polling con billetera), se llama a `comprar(...)` y se guarda el resultado con `finalizarCompra`.
 5. **Confirmación:** muestra la compra (la del context o, si se entra directo por URL, la del historial) y llama a `limpiarSeleccion()`.
 6. **Mis compras:** `getHistorial` y `cancelarCompra`. Al cancelar, el mock deja de contar esas butacas como ocupadas.
 
@@ -117,3 +121,15 @@ Si al pagar el servidor responde 409 porque una butaca ya está ocupada, se vuel
 3. Mostrar los tres estados con `Cargando`/`Skeleton`, `ErrorState` y `EmptyState`.
 4. Usar `EncabezadoPagina` (un solo `<h1>`) y `useDocumentTitle`.
 5. Registrar la ruta en `routes/clienteRoutes.jsx` (dentro de `RequireAuth` si necesita sesión) y, si corresponde, el link en `Header.jsx`.
+
+## Tiempo de la compra y retención de butacas
+
+- `CompraContext` guarda `vencimiento` (timestamp), `extensionUsada` e `idReserva`, y los persiste en `sessionStorage`. Por eso recargar no reinicia el tiempo.
+- `alternarButaca` fija el vencimiento con la primera butaca y lo cancela si se sacan todas.
+- `TemporizadorCompra` está en `ClienteLayout`, así se ve en todos los pasos, incluido el login. Al vencer llama a `expirarCompra`, salvo que haya un pago en curso (`pagando`).
+- Cuando cambia `idReserva`, un efecto de `CompraProvider` libera la reserva anterior.
+- La retención vive en `mockDb` (`retenciones`). `getButacas` marca como ocupadas las butacas retenidas por otra reserva vigente. Las vencidas se ignoran solas.
+
+## Imágenes
+
+`utils/imagenes.js` usa `import.meta.glob` para saber qué archivos hay en `src/assets/img`. `PosterImagen`, `Avatar` e `ImagenAmbiente` usan la URL si existe y, si no existe o falla (`onError`), muestran su alternativa. El carrusel, con banner o sin él, siempre tiene un fondo propio.

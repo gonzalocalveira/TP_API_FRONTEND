@@ -1,4 +1,4 @@
-# Linterna Cines: front-end (vista de cliente)
+# CineManagerPro: front-end (vista de cliente)
 
 Front-end del TPO de **Aplicaciones Interactivas (UADE, 2.º cuatrimestre 2026)**. Es el sitio de un cine ficticio con cartelera, compra de entradas con selección de butacas, candy, pago simulado y gestión de la cuenta del cliente (historial de compras, cancelación y membresía).
 
@@ -78,6 +78,26 @@ src/
   utils/               Formateo, validaciones, cálculos de la compra y de la cartelera
   styles/              tokens.css (variables de diseño) y global.css
 ```
+
+## Probar los puntos principales
+
+- **Carrusel:** en la home, usá los botones, los puntos, las flechas del teclado o deslizá en el celular. Se pausa con el botón, con el mouse encima o con el foco adentro.
+- **Temporizador:** al elegir la primera butaca arrancan 10 minutos. La barra sigue visible en todos los pasos. Con 1 minuto o menos aparece "Necesito más tiempo", que suma 5 minutos una sola vez.
+- **Billetera virtual:** en el pago, elegí "Billetera virtual" y "Generar código QR". El pago queda pendiente hasta que uses "Simular pago aprobado" o "Simular pago rechazado", o hasta que venza el tiempo.
+- **Acerca de:** link al final del footer (`/acerca-de`).
+
+## Imágenes
+
+Van en `src/assets/img/` (`peliculas/`, `equipo/` y `ambiente/`). Para agregar una alcanza con copiar el archivo con el nombre correcto: `src/utils/imagenes.js` detecta las que existen con `import.meta.glob`, y si falta una se usa el póster CSS o las iniciales. Los nombres y tamaños están en los `LEEME.md` de cada carpeta, y las fuentes en `src/assets/img/CREDITOS.md`.
+
+Los pósters de las películas reales tienen derechos de autor y se usan solo con fines educativos: **mantené el repositorio privado.**
+
+## Despliegue (SPA)
+
+Es una aplicación de una sola página: las rutas las resuelve React Router en el navegador. Si alguien recarga `/mis-compras`, el hosting recibe un pedido por un archivo que no existe y respondería 404, así que hay que redirigir todas las rutas a `index.html`. Ya están los archivos para los dos hostings más comunes:
+
+- **Netlify:** `public/_redirects`
+- **Vercel:** `vercel.json`
 
 ## Documentación
 

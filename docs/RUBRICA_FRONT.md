@@ -21,7 +21,7 @@ Cada criterio con su puntaje, dónde está en el código y qué mostrar en la de
 |---|---|---|
 | 1 | Usar HTML5, CSS3 y JavaScript | React con JSX (que genera HTML5 semántico), CSS puro con CSS Modules y variables, y JavaScript (sin TypeScript). |
 | 2 | Comunicación con el back-end por HTTP con JSON | `services/httpApi.js` usa `fetch` con `Content-Type: application/json` contra los endpoints de `ENDPOINTS.md`. El mock devuelve el mismo JSON. |
-| 3 | Interfaz web funcional | `npm run dev` levanta la app; el flujo completo funciona de punta a punta (verificado con 43 chequeos automáticos en Chrome). |
+| 3 | Interfaz web funcional | `npm run dev` levanta la app; el flujo completo funciona de punta a punta (verificado con chequeos automáticos en Chrome headless). |
 | 4 | Mostrar información | Cartelera, ficha, funciones por formato, mapa de la sala, historial de compras, membresía y promociones. |
 | 5 | Permitir operaciones | Comprar entradas (`POST /api/clientes/compras`), cancelar (`PATCH .../cancelar`), registrarse (`POST /api/usuarios`) e ingresar (`POST /api/usuarios/login`). |
 | 6 | Validaciones en la interfaz | `utils/validaciones.js` con las reglas del back-end, más Luhn y vencimiento para el pago. |
@@ -31,3 +31,16 @@ Cada criterio con su puntaje, dónde está en el código y qué mostrar en la de
 | 10 | Implementar las funcionalidades principales del dominio y ser demostrable en tiempo real | Cartelera, funciones, butacas, compra, cancelación, historial, usuarios y membresía. La demo corre en el navegador con datos que persisten en `localStorage` y se pueden resetear desde el footer. |
 
 La arquitectura respeta **Front-end → HTTP → Back-end → Base de datos**: el front nunca accede a la base; con los mocks se simula exactamente la capa HTTP (mismas rutas, códigos y JSON).
+
+## Evidencia agregada con los cambios nuevos
+
+| Criterio | Evidencia | Qué mostrar en la demo |
+|---|---|---|
+| 1. Negocio | Tiempo límite con butacas retenidas, como en la venta real de entradas (`TemporizadorCompra`, `mockApi.retenerButacas`). Pago con billetera por QR (`pages/Pago/PanelBilletera.jsx`). Marca CineManagerPro y página del equipo (`pages/AcercaDe`). | Elegir una butaca y mostrar la cuenta regresiva; pagar con QR. |
+| 2. Estructura | Ruta `/acerca-de`, link en el footer y temporizador en `ClienteLayout`. | Seguir la compra después de pasar por Promociones ("Seguir con tu compra"). |
+| 3. Accesibilidad | Carrusel WAI-ARIA, tiempo ajustable (WCAG 2.2.1) y anuncios solo en momentos clave. Detalle en [ACCESIBILIDAD.md](ACCESIBILIDAD.md). | Manejar el carrusel con flechas; usar "Necesito más tiempo". |
+| 4. Diseño | Carrusel con banners, fotos reales con fallback y precio una sola vez por función. | Cartelera y ficha de película. |
+| 5. Adaptabilidad | Carrusel con gesto de deslizar y equipo en 1 o 3 columnas. | Vista de celular de la home y de `/acerca-de`. |
+| 6. Interacción | Tres resultados del pago con billetera y polling (`usePagoBilletera`). Diálogo al vencer con vuelta a las butacas. | Los botones "Simular pago". |
+| 7. Estados | Espera, aprobado, rechazado y vencido en el pago con QR. Advertencia con el último minuto. | Pago rechazado y "Generar un QR nuevo". |
+| 8. Calidad | Lógica en hooks propios (`useCuentaRegresiva`, `useCarrusel`, `usePagoBilletera`) y en `utils/`, con intervalos que se limpian. Imágenes con `import.meta.glob`. | Mostrar `hooks/useCuentaRegresiva.js`. |

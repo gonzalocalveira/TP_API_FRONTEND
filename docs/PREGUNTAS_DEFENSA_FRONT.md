@@ -97,6 +97,49 @@ Los datos viven solo en el estado del formulario de `Pago.jsx`. A `procesarPago`
 
 ---
 
+## Preguntas sobre la SPA
+
+### ¿Qué es una SPA y en qué se diferencia de un sitio multipágina?
+Una SPA (*single page application*) carga un solo `index.html` y después JavaScript cambia el contenido sin recargar la página. En un sitio multipágina, cada link le pide al servidor un HTML nuevo y el navegador redibuja todo.
+
+### ¿Cómo lo resuelve React Router?
+`<Link>` y `useNavigate` cambian la URL con la API de historial del navegador, sin pedir nada al servidor. React Router mira la URL nueva y dibuja la ruta que corresponde en el `<Outlet />`. Como la página no se recarga, el estado de los contexts se conserva: por eso la compra sigue ahí al ir a Promociones y volver.
+
+### ¿Qué ventajas y desventajas tiene?
+- **Ventajas:** navegación rápida, sin parpadeos, y estado que se conserva entre pantallas. Además, separa bien el front de la API.
+- **Desventajas:** la carga inicial es más pesada porque baja todo el JavaScript. El SEO también es más difícil, porque el HTML inicial está casi vacío y el contenido lo arma JavaScript.
+
+### ¿Por qué hace falta la redirección al desplegar?
+Si alguien recarga `/mis-compras`, ese pedido llega al servidor antes que a React. El archivo no existe, así que respondería 404. Por eso `public/_redirects` (Netlify) y `vercel.json` (Vercel) devuelven siempre `index.html`, y después React Router lee la URL y dibuja la página. En desarrollo no hace falta porque Vite ya lo hace.
+
+## Preguntas sobre el temporizador, el polling y el carrusel
+
+### ¿Cómo funciona `useCuentaRegresiva`? ¿Por qué hay que limpiar el intervalo?
+Un `useEffect` crea un `setInterval` que actualiza `ahora` cada segundo, y los segundos que faltan se calculan como `vencimiento - ahora`. El `return` del efecto hace `clearInterval`. Sin esa limpieza, al cambiar el vencimiento o desmontar el componente el intervalo viejo seguiría corriendo, y se irían acumulando.
+
+### ¿Por qué se guarda el momento de vencimiento y no los segundos que faltan?
+Porque el momento no cambia. Si se guardaran los segundos, recargar la página reiniciaría la cuenta o la dejaría desactualizada. Además, los intervalos del navegador se atrasan, sobre todo con la pestaña en segundo plano; calculando contra el reloj, el error no se acumula.
+
+### ¿Qué pasa si el tiempo vence mientras se está pagando?
+No se corta. El tiempo se controla antes de iniciar el pago y, mientras se procesa, `pagando` frena el vencimiento. Cortarlo en el medio podría dejar un pago hecho sin compra.
+
+### ¿Cómo evitan que el lector de pantalla anuncie cada segundo?
+El contador no está en una región viva. Hay una región `aria-live` aparte cuyo texto cambia solo en los hitos, que calcula `hitoDelTemporizador`.
+
+### ¿Qué es el polling? ¿Dónde lo usan?
+Es preguntarle al servidor cada cierto tiempo si algo cambió. `usePagoBilletera` llama a `consultarEstadoPago` cada 2 segundos, porque el resultado del pago lo decide otro sistema y el front no se entera solo. El intervalo se limpia al terminar el pago, al cambiar de pago o al salir de la pantalla. La variable `vigente` evita guardar una respuesta que llega tarde.
+
+### ¿Para qué usan `useEffectEvent` en ese hook?
+Para llamar siempre a la versión actual de `onAprobado` sin ponerla en las dependencias. Esa función cambia en cada render: si fuera una dependencia, el intervalo se reiniciaría todo el tiempo.
+
+### ¿Cómo funciona el carrusel?
+`useCarrusel` guarda el slide actual y un `setInterval` lo avanza. El efecto depende de `avanzando`, que es falso con pausa, con hover, con foco adentro o con `prefers-reduced-motion`. Cuando pasa a falso, la limpieza corta el intervalo. Todos los slides ocupan la misma celda de la grilla, así el alto no salta, y los que no se ven quedan `inert`.
+
+### ¿Qué es `import.meta.glob`?
+Es una función de Vite que se resuelve al compilar: busca los archivos que coinciden con un patrón y arma un objeto `{ ruta: url }` solo con los que existen. En `utils/imagenes.js` permite agregar una imagen copiando el archivo, sin tocar código. Si el archivo no está, el helper devuelve `null` y no se pide nada, así que no aparece un 404 en la consola. `onError` queda como respaldo si una imagen falla igual.
+
+---
+
 ## 10 preguntas de "¿cómo modificarías o extenderías X?"
 
 1. **¿Cómo conectarías la API real?** Creás `.env.local` con `VITE_USE_MOCKS=false` y `VITE_API_URL=http://localhost:8080`, y habilitás CORS en el back. No se toca ningún componente (ver `INTEGRACION_BACKEND.md`).

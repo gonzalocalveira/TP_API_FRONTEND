@@ -6,9 +6,9 @@ Objetivo: **WCAG 2.1 nivel AA**. Este documento resume las decisiones, los patro
 
 - `<html lang="es">` en `index.html`.
 - Landmarks en `ClienteLayout`: `<header>`, `<nav aria-label="Principal">`, `<main id="contenido">` y `<footer>`. Hay otros `nav` con nombre propio: "Pasos de la compra" (stepper), "Ruta de navegación" (ficha de película) y "Explorá" (footer). El resumen de compra es un `<aside>`.
-- **Un solo `<h1>` por página.** Está en `EncabezadoPagina`, salvo en la cartelera, donde es visualmente oculto ("Linterna Cines: cartelera y venta de entradas") porque la primera pieza visual es el estreno destacado. Los encabezados no saltan niveles (verificado en las 10 rutas públicas).
+- **Un solo `<h1>` por página.** Está en `EncabezadoPagina`, salvo en la cartelera, donde es visualmente oculto ("CineManagerPro: cartelera y venta de entradas") porque la primera pieza visual es el estreno destacado. Los encabezados no saltan niveles (verificado en las 10 rutas públicas).
 - Las listas de películas, funciones, productos, compras y promociones son `<ul>`. Cada tarjeta de película o compra es un `<article>`. Los datos clave-valor (función, sala, butacas) son `<dl>`. El detalle de entradas es una `<table>` con `<caption>` y `<th scope="col">`.
-- `document.title` distinto en cada página (`useDocumentTitle`), por ejemplo "Interstellar | Linterna Cines".
+- `document.title` distinto en cada página (`useDocumentTitle`), por ejemplo "Interstellar | CineManagerPro".
 
 ## Navegación con teclado y foco
 
@@ -20,7 +20,7 @@ Objetivo: **WCAG 2.1 nivel AA**. Este documento resume las decisiones, los patro
 
 ### Recorrido con Tab (registrado con Chrome headless)
 
-**Cartelera (`/`)**, desde que carga la página: Saltar al contenido → logo → Cartelera → Candy → Promociones → Ingresar → "Comprá tus entradas" → Película (select) → Día → Horario → Buscar funciones → 2D → 3D → 4DX → Todos → cada uno de los 7 días → cada película de la grilla → "Ver todas las promociones" → películas de "Próximamente" → links del footer → "Restablecer datos de prueba".
+**Cartelera (`/`)**, desde que carga la página: Saltar al contenido → logo → Cartelera → Candy → Promociones → Ingresar → "Comprá tus entradas" del slide visible → pausa del carrusel → película anterior → puntos → película siguiente → Película (select) → Día → Horario → Buscar funciones → 2D → 3D → 4DX → Todos → cada uno de los 7 días → cada película de la grilla → "Ver todas las promociones" → películas de "Próximamente" → links del footer → "Restablecer datos de prueba".
 
 **Ficha de película (`/peliculas/1`)**, desde el `<main>`: link "Cartelera" (ruta de navegación) → los días con funciones (los días sin funciones están deshabilitados y se saltean) → cada horario (aria-label: "18:00 h, Sala 1, 2D, $ 4.500,00. Elegir butacas") → footer.
 
@@ -112,3 +112,34 @@ Verificado con Chrome headless (scripts de prueba con el protocolo DevTools):
 - No se probó con un lector de pantalla real (NVDA, VoiceOver). Se recomienda recorrer el flujo de compra con NVDA + Chrome.
 - No se pasó una herramienta automática como axe o Lighthouse (no se agregaron dependencias).
 - El zoom al 200% y el modo de alto contraste de Windows no se probaron.
+
+## Carrusel de destacados
+
+- Patrón de carrusel de WAI-ARIA: `aria-roledescription="carrusel"` en la sección, y `role="group"` con `aria-roledescription="diapositiva"` y `aria-label="1 de 5: La última función"` en cada slide.
+- Los slides que no se ven quedan `inert`: sus links no reciben foco ni los lee el lector de pantalla.
+- Controles con nombre: pausar (botón de alternar con `aria-pressed`), película anterior, película siguiente y un punto por slide (`aria-label="Ir a la película 2: ..."`, `aria-current` en el actual). El punto actual se distingue por color y por forma.
+- Teclado: flechas izquierda y derecha con el foco dentro del carrusel.
+- El avance automático se detiene con el mouse encima, con el foco adentro o con el botón de pausa, y no arranca si el usuario pidió `prefers-reduced-motion` (verificado).
+- `aria-live` vale `off` mientras avanza solo y `polite` cuando está detenido, para no interrumpir al lector de pantalla.
+
+## Temporizador de la compra
+
+- WCAG 2.2.1 (tiempo ajustable): con 1 minuto o menos aparece "Necesito más tiempo", que suma 5 minutos una sola vez por compra.
+- El contador no está en una región viva, así que no se anuncia cada segundo. Una región `aria-live="polite"` aparte solo cambia a los 5 minutos y a 1 minuto. Al vencer, el aviso lo da el diálogo, que recibe el foco.
+- La advertencia no depende solo del color: cambia el ícono y se agrega texto. El rojo `#FF5C66` sobre las superficies de la barra da 5.92 y 5.23.
+- Al usar el botón, que desaparece, el foco pasa a la barra del temporizador.
+
+## Pago con QR
+
+- El QR es decorativo (`aria-hidden`): el código de operación y el monto están como texto.
+- El estado ("Esperando confirmación del pago...") está en una región `aria-live="polite"`, y el spinner es decorativo.
+- Al generar el QR el botón desaparece, así que el foco pasa al panel. Al elegir otro medio, el foco pasa al radio seleccionado.
+- Los controles de demo están en un grupo con nombre ("Solo para la demo").
+
+## Imágenes
+
+- Pósters con `alt="Póster de X"`, `width`/`height` y `aspect-ratio`, así no salta el diseño.
+- Los banners y las fotos de ambiente son decorativos (`alt=""`): el título de la película y el contenido están como texto. Sobre el banner hay un velo oscuro para mantener el contraste del texto.
+- Avatares: `alt` con el nombre o, sin foto, un círculo de iniciales con `role="img"` y el nombre como etiqueta. Texto oscuro sobre amarillo: 12.17.
+
+El contraste del texto sobre los banners se resolvió con el velo, pero no se midió foto por foto: conviene revisarlo a ojo al cargar banners nuevos.

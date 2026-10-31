@@ -44,7 +44,7 @@ No hay que tocar ningún componente: todos importan las funciones de `src/servic
 | 400 | Registro, compra | El mensaje del servidor (las validaciones del front evitan casi todos) |
 | 401 | Ingresar | "El mail o la contraseña no son correctos" |
 | 404 | Película o función inexistente, compra que no es del usuario | Mensaje y link a la cartelera (sin "Reintentar", porque no tendría sentido) |
-| 404 | Membresía | No es un error: se muestra el estado vacío "Todavía no sos parte del Club Linterna" |
+| 404 | Membresía | No es un error: se muestra el estado vacío "Todavía no sos parte del Club CineManagerPro" |
 | 409 | Butaca ocupada al pagar | Vuelve al mapa actualizado con un aviso y saca esa butaca de la selección |
 | 409 | Cancelar una compra cancelada o de una función que ya empezó | Toast de error con el mensaje del servidor |
 | 409 | Registro con mail o DNI repetido | El mensaje del servidor arriba del formulario |
@@ -75,7 +75,7 @@ Lo que sí coincide con `02_datos.sql`: las películas 1 a 4, las Salas 1 y 2 co
 
 **Qué va a cambiar en pantalla al conectar la API real:**
 
-1. **Menos películas:** la cartelera va a mostrar solo las 4 de la base. El estreno destacado pasa a ser *Dune: Parte Dos* (la estrenada más recientemente).
+1. **Menos películas:** la cartelera va a mostrar solo las 4 de la base. El carrusel de destacados va a tener esas 4, empezando por *Dune: Parte Dos* (la estrenada más recientemente).
 2. **"Próximamente" desaparece**, porque ninguna película de la base tiene fecha de estreno futura. La sección se oculta sola cuando no hay películas (no queda un hueco vacío).
 3. **Menos funciones:** solo las 6 del SQL, entre mañana y dentro de 3 días. En los filtros por día, "Hoy" y los días 4 a 6 van a mostrar el estado vacío "No hay películas con esos filtros". En la ficha de película, los días sin funciones aparecen deshabilitados.
 4. **Sin Sala 3:** las funciones van a estar solo en las Salas 1 y 2.
@@ -95,7 +95,8 @@ Son datos que la interfaz usa y que hoy el back-end no tiene:
 | Candy de la compra | Que el candy quede guardado en la compra y aparezca en "Mis compras" | `items` en `POST /api/clientes/compras` y en la respuesta |
 | Pago | Registrar el medio de pago y la aprobación | Entidad `Pago { compraId, medio, monto, estado, codigoAutorizacion }` (con una pasarela real, el front nunca debería mandar datos de tarjeta al back, sino un token de la pasarela) |
 | Promociones | Sección de la home y `/promociones` | `GET /api/promociones`; si se quieren aplicar al total, el cálculo tiene que hacerlo el servidor |
-| Imagen o póster de la película | Hoy se dibuja con CSS | Campo `posterUrl` en `Pelicula` |
+| Póster y banner de la película | Hoy salen de `src/assets/img/peliculas` (o del póster CSS si falta el archivo) | Campos `posterUrl` y `bannerUrl` en `Pelicula`. Si la API no los manda, el front busca el archivo local por `id` |
+| Retención temporal de butacas | Hoy existe solo en el mock | Ver la sección de abajo |
 | Sesión segura | Hoy la sesión del front es el usuario devuelto por el login, guardado en `localStorage` | Con Spring Security: login que devuelva un token (JWT) y endpoints de cliente que lo exijan |
 | Beneficios por tipo de membresía | Pantalla "Mi cuenta" | Tabla de beneficios por `tipoMembresia`, o dejarlo como contenido del front |
 
@@ -108,3 +109,25 @@ Son datos que la interfaz usa y que hoy el back-end no tiene:
 - Máximo 8 butacas por compra (regla del front; el back-end no tiene límite).
 
 El servidor vuelve a validar todo: las validaciones del front son para dar respuesta rápida y mensajes claros, no reemplazan a las del back.
+
+## Retención temporal de butacas (solo front y mock)
+
+**El back-end no tiene esta función.** En el mock, las butacas elegidas quedan retenidas para esa compra hasta que vence el tiempo: otra compra las ve ocupadas (`retenerButacas`, `liberarButacas` y el campo `retenciones` de `mockDb`).
+
+Con la API real, esas funciones no hacen nada (`httpApi.js`). El temporizador sigue funcionando, pero **solo en el navegador**: dos personas pueden elegir la misma butaca, y la segunda recibe el 409 recién al comprar.
+
+Para hacerlo bien, el back-end tendría que agregar un estado `RESERVADA` con vencimiento en las entradas, por ejemplo con `POST /api/reservas` y `DELETE /api/reservas/{id}`. El servidor tiene que ser quien controle el vencimiento, porque el reloj del navegador se puede cambiar.
+
+## Pago con billetera virtual: cómo sería la integración real
+
+**No se hace ahora porque necesita el back-end.** Hoy `crearPagoBilletera` y `consultarEstadoPago` son una simulación de `mockApi.js`, y `httpApi.js` tiene el esqueleto comentado. Los botones "Simular pago" existen solo para la demo.
+
+Con Mercado Pago (Checkout Pro o QR), el flujo sería:
+
+1. El front le pide el pago al back-end: `POST /api/pagos/billetera` con la compra o la reserva.
+2. El back-end calcula el monto y crea la preferencia de pago u orden QR con **sus credenciales de Mercado Pago**. Las credenciales **nunca van en el front**, porque cualquiera podría leerlas.
+3. El back-end le devuelve al front los datos para mostrar el QR y el identificador del pago.
+4. La persona paga desde su billetera.
+5. Mercado Pago avisa al back-end por **webhook**. El back-end verifica el aviso y actualiza el estado del pago.
+6. El front consulta el estado al back-end (`GET /api/pagos/{id}`) cada pocos segundos. Es lo mismo que ya hace `usePagoBilletera`, así que ese código no cambia.
+7. Con el pago aprobado, es el back-end quien debería confirmar la compra. Hoy la confirma el front, llamando a `comprar`, porque el pago es simulado.
