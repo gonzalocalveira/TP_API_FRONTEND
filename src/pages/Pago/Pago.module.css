@@ -122,3 +122,91 @@
   background: var(--color-superficie);
   border: 1px solid var(--color-borde);
 }
+
+/* Panel de la billetera virtual: estética propia de CineManagerPro, sin imitar a ninguna billetera */
+.billetera:focus-visible {
+  outline-offset: 3px;
+}
+
+.billetera:has(.qrBloque) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.qrBloque {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-4);
+}
+
+.qrDatos {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.operacion {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+  overflow-wrap: anywhere;
+}
+
+.estadoPago {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: 600;
+}
+
+.estadoError svg {
+  flex-shrink: 0;
+  color: var(--color-error);
+}
+
+.spinner {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-acento);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.accionesBilletera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+}
+
+/* Controles de demo: borde punteado y título, separados del flujo normal */
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+  border: 2px dashed var(--color-borde-control);
+  border-radius: var(--radio-md);
+}
+
+.demoTitulo {
+  color: var(--color-acento);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demoTexto {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}

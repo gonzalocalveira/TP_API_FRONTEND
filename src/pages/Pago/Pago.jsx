@@ -11,9 +11,11 @@ import { useCompra } from '../../hooks/useCompra.js'
 import { useToast } from '../../hooks/useToast.js'
 import { useFormulario } from '../../hooks/useFormulario.js'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
-import { comprar, procesarPago } from '../../services/api.js'
+import { usePagoBilletera } from '../../hooks/usePagoBilletera.js'
+import PanelBilletera from './PanelBilletera.jsx'
+import { comprar, crearPagoBilletera, procesarPago } from '../../services/api.js'
 import { MEDIOS_DE_PAGO, validarPago, formatearNumeroTarjeta, formatearVencimiento, soloDigitos } from '../../utils/validaciones.js'
-import { subtotalEntradas, subtotalCandy } from '../../utils/compra.js'
+import { subtotalEntradas, subtotalCandy, tiempoVencido } from '../../utils/compra.js'
 import { formatearPrecio } from '../../utils/formato.js'
 import estilosCompra from '../../layouts/CompraLayout.module.css'
 import estilos from './Pago.module.css'
@@ -39,6 +41,7 @@ export default function Pago() {
   const { mostrarToast } = useToast()
   const [procesando, setProcesando] = useState(false)
   const [errorPago, setErrorPago] = useState(null)
+  const [pagoBilletera, setPagoBilletera] = useState(null)
 
   const formulario = useFormulario(
     { medioPago: 'CREDITO', numeroTarjeta: '', titular: '', vencimiento: '', cvv: '', mail: usuario.mail },
@@ -59,42 +62,103 @@ export default function Pago() {
     cambiarValor(name, formateadores[name] ? formateadores[name](value) : value)
   }
 
+  // POST /api/clientes/compras: el back-end calcula el total de las entradas.
+  async function registrarCompra() {
+    const compraConfirmada = await comprar({
+      usuarioId: usuario.id,
+      funcionId: compra.funcion.id,
+      asientoIds: compra.butacas.map((b) => b.id),
+      idReserva: compra.idReserva,
+    })
+    compra.finalizarCompra({ compra: compraConfirmada, medioPago: valores.medioPago })
+    mostrarToast({ tipo: 'exito', mensaje: '¡Compra confirmada! Ya tenés tus entradas.' })
+    navigate(`/compra/confirmacion/${compraConfirmada.id}`)
+  }
+
+  function manejarErrorCompra(error) {
+    setProcesando(false)
+    setPagoBilletera(null)
+    // 409 por butaca ocupada: alguien la compró mientras se pagaba. Se vuelve al mapa actualizado.
+    if (error.status === 409 && error.message.toLowerCase().includes('butaca')) {
+      navigate(`/compra/${compra.funcion.id}/butacas`, {
+        state: {
+          aviso: {
+            tipo: 'error',
+            mensaje: `${error.message}. Otra persona la compró mientras pagabas. Elegí otra butaca: el pago simulado se anuló.`,
+          },
+        },
+      })
+      return
+    }
+    setErrorPago(error)
+  }
+
+  // Genera el QR de la billetera. El pago queda pendiente hasta que llegue el resultado por polling.
+  async function generarQr() {
+    setErrorPago(null)
+    if (tiempoVencido(compra.vencimiento)) {
+      compra.expirarCompra()
+      return
+    }
+    setProcesando(true)
+    try {
+      setPagoBilletera(await crearPagoBilletera({ monto: total }))
+      // El botón que se tocó ya no está: el foco pasa al panel del QR para no perderse.
+      requestAnimationFrame(() => document.getElementById('panel-billetera')?.focus())
+    } catch (error) {
+      setErrorPago(error)
+    } finally {
+      setProcesando(false)
+    }
+  }
+
+  function elegirOtroMedio() {
+    setPagoBilletera(null)
+    cambiarValor('medioPago', 'CREDITO')
+    requestAnimationFrame(() => document.querySelector('input[name="medioPago"]:checked')?.focus())
+  }
+
+  // Cuando el polling informa que se aprobó, se registra la compra.
+  async function alAprobarseBilletera() {
+    compra.setPagando(true)
+    try {
+      await registrarCompra()
+    } catch (error) {
+      manejarErrorCompra(error)
+    } finally {
+      compra.setPagando(false)
+    }
+  }
+  const { estado: estadoBilletera, error: errorBilletera } = usePagoBilletera(pagoBilletera?.id ?? null, alAprobarseBilletera)
+
   async function pagar(evento) {
     evento.preventDefault()
+    if (pagoBilletera) return
     setErrorPago(null)
     if (!formulario.validarAlEnviar()) return
+    if (!conTarjeta) {
+      generarQr()
+      return
+    }
+    // El vencimiento se controla acá, antes de empezar: un pago ya iniciado no se corta.
+    if (tiempoVencido(compra.vencimiento)) {
+      compra.expirarCompra()
+      return
+    }
 
     setProcesando(true)
+    compra.setPagando(true)
     try {
       await procesarPago({
         medioPago: valores.medioPago,
         monto: total,
-        ultimos4: conTarjeta ? soloDigitos(valores.numeroTarjeta).slice(-4) : null,
+        ultimos4: soloDigitos(valores.numeroTarjeta).slice(-4),
       })
-      // POST /api/clientes/compras: el back-end calcula el total de las entradas.
-      const compraConfirmada = await comprar({
-        usuarioId: usuario.id,
-        funcionId: compra.funcion.id,
-        asientoIds: compra.butacas.map((b) => b.id),
-      })
-      compra.finalizarCompra({ compra: compraConfirmada, medioPago: valores.medioPago })
-      mostrarToast({ tipo: 'exito', mensaje: '¡Compra confirmada! Ya tenés tus entradas.' })
-      navigate(`/compra/confirmacion/${compraConfirmada.id}`)
+      await registrarCompra()
     } catch (error) {
-      setProcesando(false)
-      // 409 por butaca ocupada: alguien la compró mientras se pagaba. Se vuelve al mapa actualizado.
-      if (error.status === 409 && error.message.toLowerCase().includes('butaca')) {
-        navigate(`/compra/${compra.funcion.id}/butacas`, {
-          state: {
-            aviso: {
-              tipo: 'error',
-              mensaje: `${error.message}. Otra persona la compró mientras pagabas. Elegí otra butaca: no se te cobró nada.`,
-            },
-          },
-        })
-        return
-      }
-      setErrorPago(error)
+      manejarErrorCompra(error)
+    } finally {
+      compra.setPagando(false)
     }
   }
 
@@ -134,6 +198,7 @@ export default function Pago() {
                     name="medioPago"
                     value={valor}
                     checked={valores.medioPago === valor}
+                    disabled={pagoBilletera !== null}
                     onChange={manejarCambio}
                     className={estilos.radio}
                   />
@@ -200,9 +265,17 @@ export default function Pago() {
                 />
               </div>
             </fieldset>
+          ) : pagoBilletera ? (
+            <PanelBilletera
+              pago={pagoBilletera}
+              estado={estadoBilletera}
+              error={errorBilletera}
+              onReintentar={generarQr}
+              onOtroMedio={elegirOtroMedio}
+            />
           ) : (
             <p className={estilos.billetera}>
-              Al confirmar, simulamos que tu billetera virtual aprueba el pago de {formatearPrecio(total)}.
+              Vas a ver un código QR para pagar {formatearPrecio(total)} con tu billetera virtual.
             </p>
           )}
 
@@ -228,9 +301,12 @@ export default function Pago() {
           candy={compra.candy}
           accion={
             // El botón está fuera del <form>: el atributo form="form-pago" lo conecta igual.
-            <Button type="submit" form="form-pago" bloque tamano="lg" cargando={procesando} textoCargando="Procesando el pago...">
-              Pagar {formatearPrecio(total)}
-            </Button>
+            // Con el QR en pantalla la acción está en el panel: acá no queda ningún botón sin función.
+            !pagoBilletera && (
+              <Button type="submit" form="form-pago" bloque tamano="lg" cargando={procesando} textoCargando="Procesando...">
+                {conTarjeta ? `Pagar ${formatearPrecio(total)}` : 'Generar código QR'}
+              </Button>
+            )
           }
         />
       </div>
