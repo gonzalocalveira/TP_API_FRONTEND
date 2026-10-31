@@ -55,3 +55,18 @@ export const registrar = ({ nombreApellido, dni, fechaNacimiento, mail, password
 // SIMULADO EN EL FRONT, SIN ENDPOINT EN EL BACK: aunque se use la API real, candy, promociones
 // y pago siguen saliendo del mock hasta que el back-end los implemente.
 export const { getProductosCandy, getPromociones, procesarPago } = mockApi
+
+// Retención temporal de butacas: el back-end NO la tiene. Con la API real no hacen nada (las butacas
+// se validan recién al comprar). Si el back la agrega (por ejemplo, entradas en estado RESERVADA con
+// vencimiento), acá irían: POST /api/reservas y DELETE /api/reservas/{id}.
+export const retenerButacas = async () => null
+export const liberarButacas = async () => null
+
+// Pago con billetera virtual (QR). ESQUELETO: el back-end todavía no tiene estos endpoints, así que por ahora
+// se usa la simulación de mockApi. Cuando existan, se reemplaza la línea de export por algo así:
+//   export const crearPagoBilletera = ({ monto, idReserva }) =>
+//     pedir('/api/pagos/billetera', { method: 'POST', body: { monto, idReserva } })
+//     // el back crea la orden con SUS credenciales de Mercado Pago y devuelve { id, codigoOperacion, qr, monto, estado }
+//   export const consultarEstadoPago = (id) => pedir(`/api/pagos/${id}`)
+//     // el back responde el estado que le avisó Mercado Pago por webhook: PENDIENTE, APROBADO o RECHAZADO
+export const { crearPagoBilletera, consultarEstadoPago, simularResultadoPago } = mockApi

@@ -11,6 +11,9 @@ const estadoInicial = {
   usuariosRegistrados: [],
   // Butacas que "compró otra persona" (las agrega el modo ?error=409): [{ funcionId, asientoId }]
   ocupadasPorOtros: [],
+  // Butacas retenidas mientras corre el tiempo de una compra (solo existe en el mock):
+  // [{ idReserva, funcionId, asientoIds, vencimiento }]
+  retenciones: [],
   proximoIdCompra: 1,
   proximoIdEntrada: 1,
   proximoIdUsuario: 4, // 1 a 3 son los usuarios de 02_datos.sql
@@ -19,8 +22,10 @@ const estadoInicial = {
 // Copia en memoria por si localStorage no está disponible.
 let respaldoEnMemoria = structuredClone(estadoInicial)
 
+// Se combina con el estado inicial para que un dato guardado por una versión anterior no rompa (campos nuevos).
 export function leerDb() {
-  return leerJSON(CLAVE, null) ?? structuredClone(respaldoEnMemoria)
+  const guardado = leerJSON(CLAVE, null)
+  return guardado ? { ...structuredClone(estadoInicial), ...guardado } : structuredClone(respaldoEnMemoria)
 }
 
 export function guardarDb(estado) {

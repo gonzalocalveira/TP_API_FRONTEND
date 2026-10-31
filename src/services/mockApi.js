@@ -18,8 +18,8 @@ import { ordenarPorFechaYHora } from '../utils/compra.js'
 
 // Utilidades internas -------------------------------------------------------------
 
-function demora() {
-  const ms = 300 + Math.random() * 500
+function demora(minimo = 300, maximo = 800) {
+  const ms = minimo + Math.random() * (maximo - minimo)
   return new Promise((resolver) => setTimeout(resolver, ms))
 }
 
@@ -74,8 +74,14 @@ function buscarFuncion(funcionId, path) {
   return funcion
 }
 
-// Butacas ocupadas de una función: la ocupación inicial simulada + las compras confirmadas + las de "otros".
-function idsOcupados(funcionId, db) {
+// Retenciones que todavía no vencieron. Las vencidas se ignoran solas, aunque nadie las haya liberado.
+function retencionesVigentes(db, ahora = Date.now()) {
+  return db.retenciones.filter((r) => r.vencimiento > ahora)
+}
+
+// Butacas ocupadas de una función: la ocupación inicial simulada + las compras confirmadas + las de "otros"
+// + las retenidas por OTRAS compras en curso (las de la propia reserva no cuentan como ocupadas).
+function idsOcupados(funcionId, db, idReservaPropia = null) {
   const ocupados = new Set(
     asientos.filter((a) => estabaOcupada(funcionId, a.id)).map((a) => a.id),
   )
@@ -85,6 +91,9 @@ function idsOcupados(funcionId, db) {
     }
   }
   db.ocupadasPorOtros.filter((o) => o.funcionId === funcionId).forEach((o) => ocupados.add(o.asientoId))
+  retencionesVigentes(db)
+    .filter((r) => r.funcionId === funcionId && r.idReserva !== idReservaPropia)
+    .forEach((r) => r.asientoIds.forEach((id) => ocupados.add(id)))
   return ocupados
 }
 
@@ -128,11 +137,12 @@ export function getFuncion(id) {
 }
 
 // GET /api/funciones/{id}/butacas  -> [{ id, filaAsiento, numeroAsiento, ocupada }]
-export function getButacas(funcionId) {
+// idReserva es solo del mock: sirve para que las butacas que retiene tu propia compra no se vean ocupadas.
+export function getButacas(funcionId, { idReserva = null } = {}) {
   const path = `/api/funciones/${funcionId}/butacas`
   return responderLectura(path, () => {
     const funcion = buscarFuncion(funcionId, path)
-    const ocupados = idsOcupados(funcion.id, leerDb())
+    const ocupados = idsOcupados(funcion.id, leerDb(), idReserva)
     return asientos
       .filter((a) => a.salaId === funcion.salaId)
       .map((a) => ({ id: a.id, filaAsiento: a.filaAsiento, numeroAsiento: a.numeroAsiento, ocupada: ocupados.has(a.id) }))
@@ -142,7 +152,8 @@ export function getButacas(funcionId) {
 // Compras ---------------------------------------------------------------------------
 
 // POST /api/clientes/compras  body: { usuarioId, funcionId, asientoIds }
-export async function comprar({ usuarioId, funcionId, asientoIds }) {
+// idReserva es solo del mock: la retención de esa compra no bloquea sus propias butacas y se libera al comprar.
+export async function comprar({ usuarioId, funcionId, asientoIds, idReserva = null }) {
   const path = '/api/clientes/compras'
   await demora()
 
@@ -170,7 +181,7 @@ export async function comprar({ usuarioId, funcionId, asientoIds }) {
     desactivarModoError()
   }
 
-  const ocupados = idsOcupados(funcion.id, db)
+  const ocupados = idsOcupados(funcion.id, db, idReserva)
   const butacas = asientoIds.map((asientoId) => {
     const asiento = asientos.find((a) => a.id === asientoId)
     if (!asiento) throw new ApiError({ status: 404, message: `No existe la butaca con id ${asientoId}`, path })
@@ -205,6 +216,7 @@ export async function comprar({ usuarioId, funcionId, asientoIds }) {
     })),
   }
   db.compras.push(compra)
+  db.retenciones = db.retenciones.filter((r) => r.idReserva !== idReserva)
   guardarDb(db)
   return structuredClone(compra)
 }
@@ -323,6 +335,75 @@ export async function procesarPago({ medioPago, monto, ultimos4 }) {
     throw new ApiError({ status: 402, error: 'Payment Required', message: 'El pago fue rechazado por el emisor de la tarjeta. Probá con otra tarjeta u otro medio de pago.', path: '(simulado) pago' })
   }
   return { aprobado: true, medioPago, monto, codigoAutorizacion: `AUT-${Date.now().toString().slice(-6)}` }
+}
+
+// Retención temporal de butacas (SOLO EN EL MOCK, el back-end no la tiene) ----------------
+// Mientras corre el tiempo de la compra, las butacas elegidas quedan reservadas para esa compra:
+// en otra pestaña se ven ocupadas. Se liberan al vencer, al sacarlas o al comprar.
+
+export async function retenerButacas({ idReserva, funcionId, asientoIds, vencimiento }) {
+  const path = '(simulado) retener butacas'
+  await demora(100, 150) // demora corta: así los pedidos de clicks seguidos llegan en orden
+  const db = leerDb()
+  const ocupados = idsOcupados(Number(funcionId), db, idReserva)
+  const tomada = asientoIds.find((id) => ocupados.has(id))
+  if (tomada) {
+    const asiento = asientos.find((a) => a.id === tomada)
+    throw new ApiError({
+      status: 409,
+      message: `La butaca ${asiento.filaAsiento}${asiento.numeroAsiento} ya está ocupada o reservada por otra persona`,
+      path,
+    })
+  }
+  db.retenciones = retencionesVigentes(db).filter((r) => r.idReserva !== idReserva)
+  db.retenciones.push({ idReserva, funcionId: Number(funcionId), asientoIds, vencimiento })
+  guardarDb(db)
+  return { idReserva, funcionId: Number(funcionId), asientoIds, vencimiento }
+}
+
+export async function liberarButacas(idReserva) {
+  await demora(100, 150)
+  const db = leerDb()
+  db.retenciones = db.retenciones.filter((r) => r.idReserva !== idReserva)
+  guardarDb(db)
+  return null
+}
+
+// Pago con billetera virtual por QR (SIMULADO EN EL FRONT, SIN ENDPOINT EN EL BACK) ----------
+// Los pagos viven en memoria (como si los guardara la billetera). Un pago arranca PENDIENTE y queda así
+// hasta que se usa un control de demo (simularResultadoPago) o vence el tiempo de la compra.
+const pagosBilletera = new Map()
+let proximoIdPago = 1
+
+export async function crearPagoBilletera({ monto }) {
+  await demora()
+  if (!(monto > 0)) throw new ApiError({ status: 400, message: 'El monto del pago tiene que ser mayor a 0', path: '(simulado) pagos' })
+  const id = proximoIdPago++
+  const pago = {
+    id,
+    codigoOperacion: `CMP-OP-${String(Date.now()).slice(-5)}${id}`,
+    monto,
+    estado: 'PENDIENTE',
+    creadoEn: aFechaHoraISO(new Date()),
+  }
+  pagosBilletera.set(id, pago)
+  return { ...pago }
+}
+
+// Lo que el front consultaría al back cada pocos segundos (polling).
+export async function consultarEstadoPago(id) {
+  await demora(150, 300)
+  const pago = pagosBilletera.get(Number(id))
+  if (!pago) throw new ApiError({ status: 404, message: 'No encontramos ese pago. Generá un código QR nuevo.', path: `(simulado) pagos/${id}` })
+  return { id: pago.id, estado: pago.estado }
+}
+
+// SOLO PARA LA DEMO: simula que la persona aprobó o rechazó el pago desde su billetera.
+export async function simularResultadoPago(id, estado) {
+  await demora(100, 200)
+  const pago = pagosBilletera.get(Number(id))
+  if (pago) pago.estado = estado
+  return pago ? { ...pago } : null
 }
 
 // Borra las compras y los usuarios registrados durante la demo.

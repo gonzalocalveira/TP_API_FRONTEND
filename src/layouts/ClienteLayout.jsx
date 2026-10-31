@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header/Header.jsx'
 import Footer from '../components/Footer/Footer.jsx'
 import BannerSimulacion from '../components/BannerSimulacion/BannerSimulacion.jsx'
+import TemporizadorCompra from '../components/TemporizadorCompra/TemporizadorCompra.jsx'
 import { useToast } from '../hooks/useToast.js'
 import estilos from './ClienteLayout.module.css'
 
@@ -47,6 +48,7 @@ export default function ClienteLayout() {
       </a>
       <BannerSimulacion />
       <Header />
+      <TemporizadorCompra />
       <main id="contenido" ref={mainRef} tabIndex={-1} className={estilos.main}>
         <Outlet />
       </main>

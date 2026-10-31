@@ -1,6 +1,6 @@
 // Autoverificación de la lógica sin dependencias extra. Se corre con: npm test
 import { pasaLuhn, vencimientoValido, validarPago, validarRegistro, formatearNumeroTarjeta, formatearVencimiento } from './validaciones.js'
-import { subtotalEntradas, subtotalCandy, puedeCancelarse } from './compra.js'
+import { subtotalEntradas, subtotalCandy, puedeCancelarse, tiempoVencido, formatearCuentaRegresiva, hitoDelTemporizador } from './compra.js'
 import { listarButacas, formatearDuracion, codigoReserva } from './formato.js'
 
 let fallas = 0
@@ -39,6 +39,12 @@ verificar(!puedeCancelarse({ estado: 'CONFIRMADA', fechaFuncion: '2026-10-28', h
 verificar(listarButacas([{ filaAsiento: 'A', numeroAsiento: 1 }, { filaAsiento: 'A', numeroAsiento: 2 }, { filaAsiento: 'B', numeroAsiento: 4 }]) === 'A1, A2 y B4', 'Lista de butacas')
 verificar(formatearDuracion(169) === '2 h 49 min', 'Duración')
 verificar(codigoReserva(12) === 'CMP-000012', 'Código de reserva')
+
+verificar(formatearCuentaRegresiva(572) === '09:32', 'Cuenta regresiva mm:ss')
+verificar(formatearCuentaRegresiva(0) === '00:00', 'Cuenta regresiva en cero')
+verificar(tiempoVencido(1000, 1000) && !tiempoVencido(2000, 1000) && !tiempoVencido(null, 1000), 'Vencimiento por timestamp')
+verificar(hitoDelTemporizador(301) === null && hitoDelTemporizador(300) === 'CINCO_MINUTOS', 'Aviso a los 5 minutos')
+verificar(hitoDelTemporizador(60) === 'UN_MINUTO' && hitoDelTemporizador(0) === 'VENCIDO', 'Aviso a 1 minuto y al vencer')
 
 if (fallas > 0) {
   throw new Error(`${fallas} verificación(es) fallaron`)

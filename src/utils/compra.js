@@ -42,3 +42,28 @@ export function agruparPorFormato(funciones) {
 export function ordenarPorFechaYHora(funciones) {
   return [...funciones].sort((a, b) => inicioFuncion(a) - inicioFuncion(b))
 }
+
+// Tiempo para completar la compra -----------------------------------------------------
+
+export const DURACION_COMPRA_MS = 10 * 60 * 1000 // 10 minutos desde la primera butaca
+export const EXTENSION_MS = 5 * 60 * 1000 // "Necesito más tiempo": +5 minutos, una sola vez por compra
+export const SEGUNDOS_AVISO = 60 // con 1 minuto o menos se muestra la advertencia
+
+export function tiempoVencido(vencimiento, ahora = Date.now()) {
+  return vencimiento !== null && vencimiento <= ahora
+}
+
+// 572 -> "09:32"
+export function formatearCuentaRegresiva(segundos) {
+  const minutos = Math.floor(segundos / 60)
+  return `${String(minutos).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`
+}
+
+// Momentos en los que se avisa al lector de pantalla (no se anuncia cada segundo).
+export function hitoDelTemporizador(segundos) {
+  if (segundos === null) return null
+  if (segundos <= 0) return 'VENCIDO'
+  if (segundos <= SEGUNDOS_AVISO) return 'UN_MINUTO'
+  if (segundos <= 5 * 60) return 'CINCO_MINUTOS'
+  return null
+}

@@ -23,6 +23,11 @@ export const {
   getProductosCandy,
   getPromociones,
   procesarPago,
+  retenerButacas,
+  liberarButacas,
+  crearPagoBilletera,
+  consultarEstadoPago,
+  simularResultadoPago,
 } = implementacion
 
 // Solo tiene sentido con los mocks: borra los datos de prueba guardados en el navegador.

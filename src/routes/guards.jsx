@@ -25,12 +25,14 @@ export function RequireAuth() {
 
 // Pide una función y al menos una butaca elegidas (para entrar a candy y pago).
 export function RequireCompra() {
-  const { funcion, butacas } = useCompra()
+  const { funcion, butacas, funcionVencida } = useCompra()
   if (!funcion) {
     return (
       <Navigate to="/" replace state={{ aviso: { tipo: 'info', mensaje: 'Primero elegí una película y una función.' } }} />
     )
   }
+  // Si se venció el tiempo, el diálogo del temporizador ya lo explica: se vuelve a butacas sin otro aviso.
+  if (butacas.length === 0 && funcionVencida) return <Navigate to={`/compra/${funcion.id}/butacas`} replace />
   if (butacas.length === 0) {
     return (
       <Navigate

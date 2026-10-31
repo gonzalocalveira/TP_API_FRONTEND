@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import SeatMap, { SeatLegend } from '../../components/SeatMap/SeatMap.jsx'
 import ResumenCompra from '../../components/ResumenCompra/ResumenCompra.jsx'
@@ -9,7 +9,8 @@ import { Cargando, Skeleton, ErrorState, EmptyState } from '../../components/Est
 import { useAsync } from '../../hooks/useAsync.js'
 import { useCompra } from '../../hooks/useCompra.js'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
-import { getFuncion, getButacas } from '../../services/api.js'
+import { useToast } from '../../hooks/useToast.js'
+import { getFuncion, getButacas, retenerButacas } from '../../services/api.js'
 import { MAX_BUTACAS, funcionYaEmpezo } from '../../utils/compra.js'
 import { etiquetaFormato, formatearFechaLarga, formatearHora } from '../../utils/formato.js'
 import estilosCompra from '../../layouts/CompraLayout.module.css'
@@ -18,9 +19,17 @@ import estilos from './Butacas.module.css'
 export default function Butacas() {
   useDocumentTitle('Elegí tus butacas')
   const { funcionId } = useParams()
-  const cargarSala = useCallback(() => Promise.all([getFuncion(funcionId), getButacas(funcionId)]), [funcionId])
+  const { sincronizarFuncion, idReserva } = useCompra()
+  // La reserva propia se lee desde una ref: así elegir la primera butaca (que crea la reserva) no recarga el mapa.
+  const idReservaRef = useRef(idReserva)
+  useEffect(() => {
+    idReservaRef.current = idReserva
+  }, [idReserva])
+  const cargarSala = useCallback(
+    () => Promise.all([getFuncion(funcionId), getButacas(funcionId, { idReserva: idReservaRef.current })]),
+    [funcionId],
+  )
   const { datos, error, cargando, reintentar } = useAsync(cargarSala)
-  const { sincronizarFuncion } = useCompra()
 
   // Cuando llega el mapa, se guarda la función en la compra en curso y se descartan
   // las butacas elegidas que ahora figuran ocupadas (por ejemplo, después de un error 409 al pagar).
@@ -66,24 +75,34 @@ export default function Butacas() {
     )
   }
 
-  return <SeleccionButacas funcion={funcion} mapa={mapa} />
+  return <SeleccionButacas funcion={funcion} mapa={mapa} recargarMapa={reintentar} />
 }
 
-function SeleccionButacas({ funcion, mapa }) {
+function SeleccionButacas({ funcion, mapa, recargarMapa }) {
   const navigate = useNavigate()
   const compra = useCompra()
+  const { mostrarToast } = useToast()
   const [aviso, setAviso] = useState('')
   // Mientras el efecto de sincronización no corrió, la compra puede tener otra función: no se muestra su selección.
   const seleccion = compra.funcion?.id === funcion.id ? compra.butacas : []
 
-  function manejarButaca(butaca) {
+  // Elige o libera la butaca y actualiza la retención en el servidor (simulado). Si otra persona la tomó
+  // mientras tanto (409), se avisa y se recarga el mapa, que la saca de la selección.
+  async function manejarButaca(butaca) {
     const yaElegida = seleccion.some((b) => b.id === butaca.id)
     if (!yaElegida && seleccion.length >= MAX_BUTACAS) {
       setAviso(`Llegaste al máximo de ${MAX_BUTACAS} butacas por compra. Para cambiar una, primero tocá una de las elegidas para liberarla.`)
       return
     }
     setAviso('')
-    compra.alternarButaca(butaca)
+    const reserva = compra.alternarButaca(butaca)
+    if (!reserva || reserva.asientoIds.length === 0) return // sin butacas, el provider libera la reserva
+    try {
+      await retenerButacas({ ...reserva, funcionId: funcion.id })
+    } catch (error) {
+      mostrarToast({ tipo: 'error', mensaje: `${error.message}. Actualizamos el mapa.` })
+      recargarMapa()
+    }
   }
 
   return (
@@ -104,7 +123,8 @@ function SeleccionButacas({ funcion, mapa }) {
           </h2>
           <p className={estilos.instrucciones}>
             Tocá una butaca para elegirla y otra vez para liberarla. Podés elegir hasta {MAX_BUTACAS}. Con el teclado, usá Tab o
-            las flechas para moverte y Enter o Espacio para elegir.
+            las flechas para moverte y Enter o Espacio para elegir. Desde la primera butaca tenés 10 minutos para completar la
+            compra; mientras tanto, quedan reservadas para vos.
           </p>
           <div aria-live="polite" className={estilosCompra.aviso}>
             {aviso && (
