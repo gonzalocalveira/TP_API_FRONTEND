@@ -1,0 +1,178 @@
+.carrusel {
+  position: relative;
+  border-bottom: 1px solid var(--color-borde);
+  background:
+    radial-gradient(ellipse at 80% 20%, var(--color-velo-primario), transparent 60%),
+    linear-gradient(to bottom, var(--color-superficie), var(--color-fondo));
+}
+
+/* Todos los slides ocupan la misma celda de la grilla: el alto es el del slide más alto y no salta */
+.slides {
+  display: grid;
+}
+
+.slide {
+  grid-area: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 500ms ease, visibility 500ms;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Banner de fondo con un velo oscuro para que el texto mantenga el contraste */
+.banner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide:has(.banner)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-velo-banner);
+}
+
+/* En pantallas anchas el texto queda a la izquierda: el velo es fuerte ahí y se aclara hacia la derecha */
+@media (min-width: 768px) {
+  .slide:has(.banner)::before {
+    background: linear-gradient(90deg, var(--color-fondo) 0%, var(--color-velo-banner) 50%, var(--color-velo-banner-suave) 100%);
+  }
+}
+
+.contenido {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--espacio-6);
+  align-items: center;
+  padding-block: var(--espacio-6) var(--espacio-4);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.antetitulo {
+  color: var(--color-acento);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-size: var(--titulo-lg);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.sinopsis {
+  max-width: 55ch;
+  font-size: var(--texto-lg);
+  margin-bottom: var(--espacio-2);
+}
+
+.poster {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .contenido {
+    grid-template-columns: 1fr 240px;
+  }
+
+  .poster {
+    display: flex;
+    box-shadow: var(--sombra-2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: 1fr 280px;
+    padding-block: var(--espacio-7) var(--espacio-5);
+  }
+}
+
+/* Controles ------------------------------------------------------------------- */
+.controles {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding-bottom: var(--espacio-5);
+}
+
+.control {
+  display: grid;
+  place-items: center;
+  width: var(--area-tactil);
+  height: var(--area-tactil);
+  flex-shrink: 0;
+  border: 2px solid var(--color-borde-control);
+  border-radius: 50%;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+.control:hover {
+  border-color: var(--color-texto);
+}
+
+.puntos {
+  display: flex;
+  align-items: center;
+}
+
+/* Área táctil de 32 px aunque el punto visible sea más chico */
+.punto {
+  position: relative;
+  width: 32px;
+  height: var(--area-tactil);
+  border: 0;
+  background: transparent;
+}
+
+.punto::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-borde-control);
+  transform: translate(-50%, -50%);
+}
+
+.punto:hover::after {
+  border-color: var(--color-texto);
+}
+
+/* El actual se distingue por color y por tamaño (más ancho) */
+.punto[aria-current='true']::after {
+  width: 24px;
+  border-radius: var(--radio-pill);
+  border-color: var(--color-acento);
+  background: var(--color-acento);
+}

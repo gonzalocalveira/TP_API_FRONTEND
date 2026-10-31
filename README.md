@@ -1,23 +1,112 @@
-<<<<<<< HEAD
-# React + Vite
+# CineManagerPro: front-end (vista de cliente)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front-end del TPO de **Aplicaciones Interactivas (UADE, 2.º cuatrimestre 2026)**. Es el sitio de un cine ficticio con cartelera, compra de entradas con selección de butacas, candy, pago simulado y gestión de la cuenta del cliente (historial de compras, cancelación y membresía).
 
-Currently, two official plugins are available:
+En esta etapa **no se conecta al back-end**: todo funciona con datos simulados que tienen exactamente la misma forma JSON que la API real (`../TP--API-UADE`). Conectarla después es cambiar una variable de entorno (ver [Integración con el back-end](docs/INTEGRACION_BACKEND.md)).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requisitos
 
-## React Compiler
+- Node.js 20 o más nuevo (se probó con Node 22).
+- npm.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Cómo levantarlo
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Abrí la URL que muestra la consola (por defecto `http://localhost:5173`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# TP_API_FRONTEND
->>>>>>> 0acb0bf790cf7a55305ee106cf7a88aa90d45ba8
+Otros comandos:
+
+| Comando | Qué hace |
+|---|---|
+| `npm run build` | Genera la versión de producción en `dist/` |
+| `npm run preview` | Sirve la versión de producción |
+| `npm run lint` | Revisa el código con ESLint |
+| `npm test` | Autoverificación de la lógica (validaciones, Luhn, totales, formateo) sin dependencias extra |
+
+## Usuario de prueba
+
+| Mail | Contraseña | Qué tiene |
+|---|---|---|
+| `ana@mail.com` | `ana1234` | Clienta, socia **GOLD** con 150 puntos |
+| `bruno@mail.com` | `bruno1234` | Cliente, no socio |
+
+Son los mismos usuarios de `database/02_datos.sql`. La pantalla de login tiene un botón para completar los datos de Ana. También podés registrarte con un usuario nuevo.
+
+**Tarjeta de prueba para el pago:** `4509 9535 6623 3704`, con cualquier vencimiento futuro y CVV de 3 dígitos. Una tarjeta válida terminada en `0002` (por ejemplo `4000 0000 0000 0002`) se rechaza siempre, para mostrar el error de pago. El pago es simulado: los datos de la tarjeta no se envían ni se guardan.
+
+## Variables de entorno
+
+Copiá `.env.example` como `.env.local` si querés cambiar algo. Si no, se usan los valores por defecto.
+
+| Variable | Por defecto | Para qué sirve |
+|---|---|---|
+| `VITE_USE_MOCKS` | `true` | `true` usa los datos simulados (`src/services/mockApi.js`); `false` usa la API real (`src/services/httpApi.js`) |
+| `VITE_API_URL` | `http://localhost:8080` | URL del back-end. Solo se usa con `VITE_USE_MOCKS=false` |
+| `VITE_SIMULAR_ERRORES` | `false` | `true` hace fallar todas las consultas simuladas con un error 500 |
+
+### Simular errores en la demo, sin tocar código
+
+| URL | Qué pasa |
+|---|---|
+| `?error=1` (por ejemplo `http://localhost:5173/?error=1`) | Todas las consultas fallan con 500: se ve el estado de error con el botón **Reintentar** |
+| `?error=409` en cualquier página antes de pagar | Al pagar, "otra persona" se queda con una de tus butacas: se ve el error 409 y la vuelta al mapa actualizado |
+| `?error=0` o el botón **Desactivar** del aviso amarillo | Apaga el modo de errores |
+
+Mientras el modo está activo, arriba de todo aparece un aviso con un botón para desactivarlo.
+
+## Resetear los datos de prueba
+
+Las compras, las cancelaciones y los usuarios registrados se guardan en el `localStorage` del navegador, así sobreviven a un recargar. Para volver al estado inicial, usá el botón **Restablecer datos de prueba** del footer: borra todo y cierra la sesión.
+
+## Estructura de carpetas
+
+```
+src/
+  main.jsx, App.jsx    Punto de entrada; App arma el router y los providers
+  routes/              Rutas de la vista de cliente y guards (rutas protegidas)
+  layouts/             ClienteLayout (header, main, footer) y CompraLayout (stepper)
+  pages/               Una carpeta por pantalla
+  components/          Componentes reutilizables (cada uno con su .module.css)
+  context/             AuthProvider, CompraProvider y ToastProvider
+  hooks/               useAsync, useFormulario, useDocumentTitle, useAuth, useCompra, useToast
+  services/            api.js (interfaz pública), mockApi.js, httpApi.js, mockDb.js, simulacion.js
+  mocks/               Datos de prueba (películas, salas, funciones, usuarios, candy, promociones)
+  utils/               Formateo, validaciones, cálculos de la compra y de la cartelera
+  styles/              tokens.css (variables de diseño) y global.css
+```
+
+## Probar los puntos principales
+
+- **Carrusel:** en la home, usá los botones, los puntos, las flechas del teclado o deslizá en el celular. Se pausa con el botón, con el mouse encima o con el foco adentro.
+- **Temporizador:** al elegir la primera butaca arrancan 10 minutos. La barra sigue visible en todos los pasos. Con 1 minuto o menos aparece "Necesito más tiempo", que suma 5 minutos una sola vez.
+- **Billetera virtual:** en el pago, elegí "Billetera virtual" y "Generar código QR". El pago queda pendiente hasta que uses "Simular pago aprobado" o "Simular pago rechazado", o hasta que venza el tiempo.
+- **Acerca de:** link al final del footer (`/acerca-de`).
+
+## Imágenes
+
+Van en `src/assets/img/` (`peliculas/`, `equipo/` y `ambiente/`). Para agregar una alcanza con copiar el archivo con el nombre correcto: `src/utils/imagenes.js` detecta las que existen con `import.meta.glob`, y si falta una se usa el póster CSS o las iniciales. Los nombres y tamaños están en los `LEEME.md` de cada carpeta, y las fuentes en `src/assets/img/CREDITOS.md`.
+
+Los pósters de las películas reales tienen derechos de autor y se usan solo con fines educativos: **mantené el repositorio privado.**
+
+## Despliegue (SPA)
+
+Es una aplicación de una sola página: las rutas las resuelve React Router en el navegador. Si alguien recarga `/mis-compras`, el hosting recibe un pedido por un archivo que no existe y respondería 404, así que hay que redirigir todas las rutas a `index.html`. Ya están los archivos para los dos hostings más comunes:
+
+- **Netlify:** `public/_redirects`
+- **Vercel:** `vercel.json`
+
+## Documentación
+
+- [Rúbrica y evidencia](docs/RUBRICA_FRONT.md)
+- [Arquitectura](docs/ARQUITECTURA_FRONT.md)
+- [Integración con el back-end](docs/INTEGRACION_BACKEND.md)
+- [Accesibilidad](docs/ACCESIBILIDAD.md)
+- [Preguntas para la defensa](docs/PREGUNTAS_DEFENSA_FRONT.md)
+
+## Stack
+
+React 19 + Vite, React Router 7, CSS Modules y JavaScript. No usa librerías de componentes, de estilos, de formularios ni de iconos: los iconos son SVG propios y los pósters se dibujan con CSS.

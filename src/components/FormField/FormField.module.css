@@ -1,0 +1,97 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.etiqueta {
+  font-weight: 600;
+  font-size: var(--texto-sm);
+}
+
+.obligatorio {
+  color: var(--color-acento);
+}
+
+.ayuda {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-xs);
+}
+
+.contenedorInput {
+  position: relative;
+  display: flex;
+}
+
+.input {
+  width: 100%;
+  min-height: var(--area-tactil);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde-control);
+  border-radius: var(--radio-md);
+  font-size: var(--texto-base);
+  transition: border-color var(--transicion);
+}
+
+select.input {
+  appearance: none;
+  padding-right: var(--espacio-6);
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-texto-suave) 50%), linear-gradient(135deg, var(--color-texto-suave) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.conAdorno {
+  padding-right: calc(var(--area-tactil) + var(--espacio-1));
+}
+
+/* Botón dentro del campo (mostrar contraseña) */
+.adorno {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: var(--area-tactil);
+  height: var(--area-tactil);
+  border: 0;
+  border-radius: var(--radio-md);
+  background: transparent;
+  color: var(--color-texto-suave);
+}
+
+.adorno:hover {
+  color: var(--color-texto);
+}
+
+.input:hover:not(:disabled) {
+  border-color: var(--color-texto-suave);
+}
+
+.input:focus-visible {
+  outline-offset: 0;
+  border-color: var(--color-foco);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input::placeholder {
+  color: var(--color-texto-suave);
+  opacity: 0.8;
+}
+
+/* El error no se comunica solo con color: también hay borde más grueso, ícono y texto */
+.inputConError {
+  border: 2px solid var(--color-error);
+}
+
+.error {
+  color: var(--color-error);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+}

@@ -1,0 +1,109 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  min-height: var(--area-tactil);
+  padding: var(--espacio-2) var(--espacio-5);
+  border: 2px solid transparent;
+  border-radius: var(--radio-pill);
+  font-weight: 600;
+  font-size: var(--texto-base);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color var(--transicion), border-color var(--transicion), color var(--transicion), transform var(--transicion);
+}
+
+.boton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.boton:disabled {
+  opacity: 0.55;
+}
+
+.sm {
+  min-height: 36px;
+  padding: var(--espacio-1) var(--espacio-4);
+  font-size: var(--texto-sm);
+}
+
+.lg {
+  min-height: 52px;
+  padding: var(--espacio-3) var(--espacio-6);
+  font-size: var(--texto-lg);
+}
+
+.bloque {
+  width: 100%;
+}
+
+/* Primario: rojo con texto blanco (5.4:1) */
+.primario {
+  background: var(--color-primario);
+  color: var(--color-texto-sobre-primario);
+}
+
+.primario:hover:not(:disabled) {
+  background: var(--color-primario-hover);
+  color: var(--color-texto-sobre-primario);
+}
+
+.primario:active:not(:disabled) {
+  background: var(--color-primario-activo);
+}
+
+/* Secundario: contorno claro */
+.secundario {
+  background: transparent;
+  border-color: var(--color-borde-control);
+  color: var(--color-texto);
+}
+
+.secundario:hover:not(:disabled) {
+  border-color: var(--color-texto);
+  background: var(--color-superficie-2);
+  color: var(--color-texto);
+}
+
+/* Texto: acción menor, subrayada */
+.texto {
+  background: transparent;
+  color: var(--color-acento);
+  padding-inline: var(--espacio-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.texto:hover:not(:disabled) {
+  color: var(--color-acento-hover);
+  background: var(--color-superficie-2);
+}
+
+/* Peligro: acciones destructivas (cancelar compra, vaciar carrito) */
+.peligro {
+  background: transparent;
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.peligro:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--color-texto-sobre-acento);
+}
+
+.spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

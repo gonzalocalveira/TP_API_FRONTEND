@@ -1,0 +1,46 @@
+# Rúbrica del front-end: evidencia
+
+Cada criterio con su puntaje, dónde está en el código y qué mostrar en la demo.
+
+## A) Rúbrica de evaluación (100 puntos)
+
+| # | Criterio | Pts | Evidencia en el código | Qué mostrar en la demo |
+|---|---|---|---|---|
+| 1 | **Adecuación al modelo de negocios** | 15 | Flujo completo de un cine: cartelera (`pages/Cartelera`), ficha (`pages/Pelicula`), butacas (`pages/Butacas`), candy (`pages/Candy`), pago (`pages/Pago`), confirmación con código de reserva (`pages/Confirmacion`), historial y cancelación (`pages/MisCompras`), club de socios (`pages/Membresia`), promociones. Datos y reglas iguales a los del back-end (`services/mockApi.js`): total = precio × cantidad, cancelar solo si está confirmada y la función no empezó, 409 por butaca ocupada. Precios en pesos con `Intl.NumberFormat('es-AR')` y textos con voseo. | Comprar 2 entradas para una película, sumar candy, pagar, ver el código, ir a Mis compras, cancelar y mostrar que la butaca volvió a quedar libre. |
+| 2 | **Estructura y arquitectura de la interfaz** | 10 | Rutas legibles (`routes/clienteRoutes.jsx`), layouts anidados (`ClienteLayout` y `CompraLayout`), stepper (`components/Stepper`) con los pasos anteriores como links, navegación principal con la página actual marcada, ruta de navegación en la ficha, 404. | Recorrer el menú; en la compra, volver a "Butacas" desde el stepper; entrar a `/compra/pago` sin butacas y ver la redirección con aviso. |
+| 3 | **Semántica y accesibilidad** | 15 | Landmarks, un `<h1>` por página, skip link, foco al `<main>` en cada navegación, `:focus-visible`, mapa de butacas con `aria-label`/`aria-pressed`/`disabled` y flechas, tabs WAI-ARIA, `<dialog>` modal, `aria-live` en totales y toasts, formularios con `aria-invalid`/`aria-describedby`, contrastes AA documentados. Detalle completo en [ACCESIBILIDAD.md](ACCESIBILIDAD.md). | Hacer el flujo solo con teclado: Tab hasta el skip link, elegir butacas con flechas y Enter, cambiar de pestaña con flechas, cancelar una compra y cerrar el diálogo con Esc. |
+| 4 | **Diseño visual y usabilidad** | 15 | Sistema de diseño en `styles/tokens.css` (sin colores sueltos en los componentes). Un solo `Button` con 4 variantes, un solo `FormField`, tarjetas consistentes. Estados hover, focus, active y disabled. La acción principal de cada paso es un botón rojo grande en el resumen. Pósters ilustrados con CSS. | Mostrar la jerarquía: estreno destacado → buscador → grilla; el botón "Continuar" o "Pagar" siempre en el mismo lugar del resumen. |
+| 5 | **Adaptabilidad a distintos dispositivos** | 10 | Mobile-first con quiebres en 768, 1024 y 1440 px. Grilla de 2 a 5 columnas, menú colapsable con `aria-expanded`, resumen como barra fija abajo en celular, mapa de butacas con scroll horizontal propio (butacas de 40 a 44 px), tipografía fluida con `clamp()`. Verificado sin scroll horizontal en 360, 768, 1024 y 1440 px. | Achicar la ventana (o usar las herramientas de desarrollo en modo celular): menú, grilla de 2 columnas, barra de "Tu compra" abajo y "Ver detalle". |
+| 6 | **Interacción y comportamiento** | 15 | Filtros por formato (varios) y día que filtran de verdad, con estado vacío y "Limpiar filtros". Buscador que consulta la API. Límite de 8 butacas con mensaje. Carrito con sumar, restar, quitar y vaciar (con confirmación). Toasts de éxito y error. Botones con "Procesando..." deshabilitados. Error 409 al pagar con vuelta al mapa actualizado. Ningún control muerto (verificado: 0 `href="#"`, 0 `onClick` en `div`). | Filtrar por 4DX; buscar funciones; intentar elegir una 9.ª butaca; vaciar el carrito; abrir con `?error=409` y pagar. |
+| 7 | **Formularios, validaciones y estados** | 10 | `useFormulario` + `utils/validaciones.js`: login, registro (mismas reglas que el back), buscador y pago (Luhn, vencimiento MM/AA no vencido, CVV de 3 o 4 dígitos, mail). Formateo mientras se escribe. Validación al salir del campo y al enviar, con `ErrorSummary`. Estados de carga (skeleton), error (con Reintentar) y vacío en todas las pantallas con datos (`components/Estados`). | Enviar el login vacío (resumen enfocado), escribir una tarjeta con un dígito mal (Luhn), usar la terminada en 0002 (rechazo), abrir `/?error=1` y Reintentar, entrar a Mis compras con un usuario nuevo (vacío). |
+| 8 | **Calidad técnica** | 10 | Separación en capas: `pages` → `hooks` → `services` → `mockApi`/`httpApi`. Componentes chicos con una responsabilidad. Lógica en `utils/` con autoverificación (`npm test`). `npm run lint` sin errores ni warnings, `npm run build` OK y consola sin errores. Nombres en español y consistentes con los DTO. | Mostrar `services/api.js` (cambio de mock a API real con una variable), `hooks/useAsync.js` y correr `npm run lint` y `npm test`. |
+
+## B) Requisitos de la Etapa 2 del enunciado
+
+| # | Requisito | Evidencia |
+|---|---|---|
+| 1 | Usar HTML5, CSS3 y JavaScript | React con JSX (que genera HTML5 semántico), CSS puro con CSS Modules y variables, y JavaScript (sin TypeScript). |
+| 2 | Comunicación con el back-end por HTTP con JSON | `services/httpApi.js` usa `fetch` con `Content-Type: application/json` contra los endpoints de `ENDPOINTS.md`. El mock devuelve el mismo JSON. |
+| 3 | Interfaz web funcional | `npm run dev` levanta la app; el flujo completo funciona de punta a punta (verificado con chequeos automáticos en Chrome headless). |
+| 4 | Mostrar información | Cartelera, ficha, funciones por formato, mapa de la sala, historial de compras, membresía y promociones. |
+| 5 | Permitir operaciones | Comprar entradas (`POST /api/clientes/compras`), cancelar (`PATCH .../cancelar`), registrarse (`POST /api/usuarios`) e ingresar (`POST /api/usuarios/login`). |
+| 6 | Validaciones en la interfaz | `utils/validaciones.js` con las reglas del back-end, más Luhn y vencimiento para el pago. |
+| 7 | Gestionar estados de carga y errores | `useAsync` + `Cargando`/`Skeleton`, `ErrorState` con Reintentar, `EmptyState`; errores de la API como `ApiError` con el formato del back; modo `?error=1` y `?error=409` para mostrarlos. |
+| 8 | Separación clara entre presentación y lógica del servidor | Los componentes nunca importan `mocks/` ni hacen `fetch`: todo pasa por `services/api.js`. Las reglas (totales, cancelación) las confirma el servidor; el front solo las anticipa. |
+| 9 | Usar la API para las operaciones de datos | Cada lectura y escritura es una función de `api.js` que corresponde a un endpoint (tabla en [INTEGRACION_BACKEND.md](INTEGRACION_BACKEND.md)). Con `VITE_USE_MOCKS=false` se usa la API real. |
+| 10 | Implementar las funcionalidades principales del dominio y ser demostrable en tiempo real | Cartelera, funciones, butacas, compra, cancelación, historial, usuarios y membresía. La demo corre en el navegador con datos que persisten en `localStorage` y se pueden resetear desde el footer. |
+
+La arquitectura respeta **Front-end → HTTP → Back-end → Base de datos**: el front nunca accede a la base; con los mocks se simula exactamente la capa HTTP (mismas rutas, códigos y JSON).
+
+## Evidencia agregada con los cambios nuevos
+
+| Criterio | Evidencia | Qué mostrar en la demo |
+|---|---|---|
+| 1. Negocio | Tiempo límite con butacas retenidas, como en la venta real de entradas (`TemporizadorCompra`, `mockApi.retenerButacas`). Pago con billetera por QR (`pages/Pago/PanelBilletera.jsx`). Marca CineManagerPro y página del equipo (`pages/AcercaDe`). | Elegir una butaca y mostrar la cuenta regresiva; pagar con QR. |
+| 2. Estructura | Ruta `/acerca-de`, link en el footer y temporizador en `ClienteLayout`. | Seguir la compra después de pasar por Promociones ("Seguir con tu compra"). |
+| 3. Accesibilidad | Carrusel WAI-ARIA, tiempo ajustable (WCAG 2.2.1) y anuncios solo en momentos clave. Detalle en [ACCESIBILIDAD.md](ACCESIBILIDAD.md). | Manejar el carrusel con flechas; usar "Necesito más tiempo". |
+| 4. Diseño | Carrusel con banners, fotos reales con fallback y precio una sola vez por función. | Cartelera y ficha de película. |
+| 5. Adaptabilidad | Carrusel con gesto de deslizar y equipo en 1 o 3 columnas. | Vista de celular de la home y de `/acerca-de`. |
+| 6. Interacción | Tres resultados del pago con billetera y polling (`usePagoBilletera`). Diálogo al vencer con vuelta a las butacas. | Los botones "Simular pago". |
+| 7. Estados | Espera, aprobado, rechazado y vencido en el pago con QR. Advertencia con el último minuto. | Pago rechazado y "Generar un QR nuevo". |
+| 8. Calidad | Lógica en hooks propios (`useCuentaRegresiva`, `useCarrusel`, `usePagoBilletera`) y en `utils/`, con intervalos que se limpian. Imágenes con `import.meta.glob`. | Mostrar `hooks/useCuentaRegresiva.js`. |

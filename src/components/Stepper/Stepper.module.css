@@ -1,0 +1,91 @@
+.stepper {
+  margin-block: var(--espacio-4) var(--espacio-5);
+}
+
+.lista {
+  display: flex;
+  gap: var(--espacio-1);
+  counter-reset: paso;
+}
+
+.paso {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* Línea que une los pasos */
+.paso::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: calc(50% + 18px);
+  right: calc(-50% + 18px);
+  height: 2px;
+  background: var(--color-borde);
+}
+
+.paso:last-child::after {
+  display: none;
+}
+
+.completo::after {
+  background: var(--color-acento);
+}
+
+.enlace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-1);
+  min-height: var(--area-tactil);
+  padding: 0 var(--espacio-1);
+  border-radius: var(--radio-sm);
+  color: var(--color-texto-suave);
+  text-decoration: none;
+  font-size: var(--texto-xs);
+  text-align: center;
+}
+
+a.enlace:hover {
+  color: var(--color-texto);
+}
+
+a.enlace:hover .numero {
+  background: var(--color-acento-hover);
+}
+
+.numero {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-borde-control);
+  background: var(--color-fondo);
+  font-weight: 700;
+  font-size: var(--texto-xs);
+}
+
+.completo .numero {
+  border-color: var(--color-acento);
+  background: var(--color-acento);
+  color: var(--color-texto-sobre-acento);
+}
+
+.actual .enlace {
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+.actual .numero {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+  color: var(--color-texto-sobre-primario);
+}
+
+@media (min-width: 768px) {
+  .enlace {
+    font-size: var(--texto-sm);
+  }
+}

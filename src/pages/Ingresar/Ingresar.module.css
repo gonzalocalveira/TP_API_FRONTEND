@@ -1,0 +1,95 @@
+/* Estilos compartidos por Ingresar y Registro */
+.pagina {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--espacio-6);
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  width: 100%;
+  max-width: 520px;
+  padding: var(--espacio-5);
+  border-radius: var(--radio-lg);
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+@media (min-width: 768px) {
+  .tarjeta {
+    padding: var(--espacio-6);
+  }
+}
+
+.titulo {
+  font-size: var(--titulo-md);
+}
+
+.bajada {
+  color: var(--color-texto-suave);
+}
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-1);
+  padding: var(--espacio-4);
+  border-radius: var(--radio-md);
+  border: 1px dashed var(--color-acento);
+  font-size: var(--texto-sm);
+}
+
+.demoTitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--color-acento);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.fila {
+  display: grid;
+  gap: var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .fila {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.errorServidor {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-md);
+  border: 2px solid var(--color-error);
+  color: var(--color-texto);
+}
+
+.errorServidor svg {
+  flex-shrink: 0;
+  color: var(--color-error);
+}
+
+.alternativa {
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+.alternativa a {
+  font-weight: 600;
+}

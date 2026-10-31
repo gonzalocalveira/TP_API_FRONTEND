@@ -1,0 +1,32 @@
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: 2px var(--espacio-2);
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Amarillo con texto oscuro: 12.2:1 */
+.clasificacion {
+  background: var(--color-acento);
+  color: var(--color-texto-sobre-acento);
+}
+
+.formato {
+  border: 1px solid var(--color-borde-control);
+  color: var(--color-texto);
+}
+
+.confirmada {
+  border: 1px solid var(--color-exito);
+  color: var(--color-exito);
+}
+
+.cancelada {
+  border: 1px dashed var(--color-texto-suave);
+  color: var(--color-texto-suave);
+}

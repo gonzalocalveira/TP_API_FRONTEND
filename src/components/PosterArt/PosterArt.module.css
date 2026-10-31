@@ -1,0 +1,130 @@
+.poster {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  overflow: hidden;
+  padding: var(--espacio-3);
+  border-radius: var(--radio-md);
+  background: linear-gradient(160deg, var(--poster-a) 0%, var(--poster-b) 100%);
+  isolation: isolate;
+}
+
+/* Oscurece la parte de abajo para que el título se lea siempre */
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(to bottom, transparent, var(--color-velo-modal));
+  z-index: -1;
+}
+
+.titulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--color-texto);
+  text-shadow: 0 2px 8px var(--color-sombra-texto);
+  overflow-wrap: anywhere;
+}
+
+.grande .titulo {
+  font-size: var(--titulo-md);
+}
+
+.pie {
+  margin-top: var(--espacio-1);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.motivo {
+  position: absolute;
+  z-index: -2;
+}
+
+.planeta {
+  width: 70%;
+  aspect-ratio: 1;
+  top: 12%;
+  left: 15%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--poster-c), var(--poster-b) 70%);
+  box-shadow: 0 0 0 6px transparent, 0 0 40px var(--poster-c);
+}
+
+.planeta::after {
+  content: '';
+  position: absolute;
+  inset: 42% -25%;
+  border: 3px solid var(--poster-c);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+  opacity: 0.8;
+}
+
+.estrellas {
+  inset: 0;
+  background-image: radial-gradient(circle, var(--poster-c) 1.5px, transparent 2px), radial-gradient(circle, var(--poster-c) 1px, transparent 1.5px);
+  background-size: 34px 34px, 21px 21px;
+  background-position: 0 0, 11px 7px;
+  opacity: 0.7;
+}
+
+.estrellas::after {
+  content: '';
+  position: absolute;
+  width: 46%;
+  aspect-ratio: 1;
+  top: 18%;
+  left: 27%;
+  background: var(--poster-c);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.sol {
+  width: 80%;
+  aspect-ratio: 1;
+  left: 10%;
+  top: 28%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--poster-c) 0 38%, transparent 39%), repeating-radial-gradient(circle, transparent 0 46%, var(--poster-c) 47% 48%, transparent 49% 54%);
+  opacity: 0.9;
+}
+
+.ondas {
+  inset: 25% -10% 0;
+  background: repeating-radial-gradient(ellipse at 50% 0, transparent 0 18px, var(--poster-c) 19px 22px);
+  opacity: 0.55;
+}
+
+.franjas {
+  inset: -20%;
+  background: repeating-linear-gradient(-35deg, transparent 0 22px, var(--poster-c) 23px 30px);
+  opacity: 0.35;
+}
+
+.luna {
+  width: 55%;
+  aspect-ratio: 1;
+  top: 10%;
+  right: 12%;
+  border-radius: 50%;
+  box-shadow: inset -18px 8px 0 0 var(--poster-c);
+  transform: rotate(-20deg);
+}
+
+/* Paletas de los pósters: definidas en tokens.css */
+.paleta1 { --poster-a: var(--poster-1-a); --poster-b: var(--poster-1-b); --poster-c: var(--poster-1-c); }
+.paleta2 { --poster-a: var(--poster-2-a); --poster-b: var(--poster-2-b); --poster-c: var(--poster-2-c); }
+.paleta3 { --poster-a: var(--poster-3-a); --poster-b: var(--poster-3-b); --poster-c: var(--poster-3-c); }
+.paleta4 { --poster-a: var(--poster-4-a); --poster-b: var(--poster-4-b); --poster-c: var(--poster-4-c); }
+.paleta5 { --poster-a: var(--poster-5-a); --poster-b: var(--poster-5-b); --poster-c: var(--poster-5-c); }
+.paleta6 { --poster-a: var(--poster-6-a); --poster-b: var(--poster-6-b); --poster-c: var(--poster-6-c); }
+.paleta7 { --poster-a: var(--poster-7-a); --poster-b: var(--poster-7-b); --poster-c: var(--poster-7-c); }
+.paleta8 { --poster-a: var(--poster-8-a); --poster-b: var(--poster-8-b); --poster-c: var(--poster-8-c); }

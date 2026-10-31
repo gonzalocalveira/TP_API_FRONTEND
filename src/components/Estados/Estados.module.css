@@ -1,0 +1,60 @@
+.skeleton {
+  display: block;
+  border-radius: var(--radio-sm);
+  background: linear-gradient(90deg, var(--color-superficie-2) 0%, var(--color-superficie-3) 50%, var(--color-superficie-2) 100%);
+  background-size: 200% 100%;
+  animation: brillo 1.4s ease-in-out infinite;
+}
+
+.redondo {
+  border-radius: var(--radio-pill);
+}
+
+@keyframes brillo {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.caja {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-7) var(--espacio-4);
+  text-align: center;
+  background: var(--color-superficie);
+  border: 1px dashed var(--color-borde-control);
+  border-radius: var(--radio-lg);
+}
+
+.titulo {
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.texto {
+  max-width: 48ch;
+  color: var(--color-texto-suave);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+}
+
+.iconoError {
+  color: var(--color-error);
+}
+
+.iconoVacio {
+  color: var(--color-acento);
+}

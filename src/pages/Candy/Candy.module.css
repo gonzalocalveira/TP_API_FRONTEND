@@ -1,0 +1,9 @@
+.skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.ambiente {
+  margin-bottom: var(--espacio-5);
+}

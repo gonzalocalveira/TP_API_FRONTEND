@@ -1,0 +1,10 @@
+/* Mismo tamaño que el póster CSS: así cambiar uno por el otro no mueve el diseño */
+.poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie-2);
+}

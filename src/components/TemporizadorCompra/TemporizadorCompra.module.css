@@ -1,0 +1,78 @@
+/* Barra pegada debajo del header mientras corre el tiempo de la compra */
+.barra {
+  position: sticky;
+  top: var(--alto-header);
+  z-index: calc(var(--z-header) - 1);
+  background: var(--color-superficie-2);
+  border-bottom: 2px solid var(--color-acento);
+}
+
+.barra:focus-visible {
+  outline-offset: -3px;
+}
+
+.contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-4);
+  padding-block: var(--espacio-2);
+}
+
+.texto {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-sm);
+}
+
+.texto svg {
+  flex-shrink: 0;
+  color: var(--color-acento);
+}
+
+/* tabular-nums: los números ocupan el mismo ancho y el texto no "baila" cada segundo */
+.tiempo {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-acento);
+}
+
+/* Con 1 minuto o menos: borde y fondo de advertencia, ícono de alerta y texto extra (no solo color).
+   Texto rojo claro sobre superficie-2: 5.23:1 */
+.urgente {
+  border-bottom-color: var(--color-error);
+  background: var(--color-superficie);
+  box-shadow: inset 4px 0 0 var(--color-error);
+}
+
+.urgente .tiempo,
+.urgente .texto svg {
+  color: var(--color-error);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--area-tactil);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.mensaje {
+  color: var(--color-texto-suave);
+}
+
+.botonesDialogo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--espacio-3);
+}

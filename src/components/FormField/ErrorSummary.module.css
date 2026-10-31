@@ -1,0 +1,27 @@
+.resumen {
+  padding: var(--espacio-4);
+  border: 2px solid var(--color-error);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+}
+
+.resumen:focus-visible {
+  outline-offset: 3px;
+}
+
+.titulo {
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: var(--espacio-2);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding-left: var(--espacio-4);
+  list-style: disc;
+  color: var(--color-error);
+}

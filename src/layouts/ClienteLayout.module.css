@@ -1,0 +1,33 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  padding-bottom: var(--espacio-8);
+}
+
+.main:focus {
+  outline: none;
+}
+
+/* Skip link: invisible hasta que recibe foco con Tab */
+.skipLink {
+  position: absolute;
+  top: var(--espacio-2);
+  left: var(--espacio-2);
+  z-index: calc(var(--z-toast) + 1);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento);
+  color: var(--color-texto-sobre-acento);
+  font-weight: 700;
+  border-radius: var(--radio-md);
+  transform: translateY(-200%);
+}
+
+.skipLink:focus {
+  transform: none;
+  color: var(--color-texto-sobre-acento);
+}

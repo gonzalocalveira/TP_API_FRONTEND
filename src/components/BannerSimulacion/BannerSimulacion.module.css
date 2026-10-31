@@ -1,0 +1,14 @@
+.banner {
+  background: var(--color-superficie-3);
+  border-bottom: 2px solid var(--color-acento);
+  font-size: var(--texto-sm);
+}
+
+.banner p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-4);
+  padding-block: var(--espacio-2);
+}

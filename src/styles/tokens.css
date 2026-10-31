@@ -1,0 +1,121 @@
+/*
+  Design tokens de CineManagerPro.
+  Todos los colores, tipografías y medidas salen de acá: los componentes no usan valores sueltos.
+  Los contrastes de cada par de colores están documentados en docs/ACCESIBILIDAD.md.
+*/
+:root {
+  /* Colores de fondo */
+  --color-fondo: #0b0b10;
+  --color-superficie: #17171f;
+  --color-superficie-2: #22222c;
+  --color-superficie-3: #2c2c38;
+
+  /* Texto */
+  --color-texto: #f5f5f7;
+  --color-texto-suave: #b4b4be;
+  --color-texto-sobre-acento: #0b0b10;
+  --color-texto-sobre-primario: #ffffff;
+
+  /* Acción y acento */
+  --color-primario: #d11a2a;
+  --color-primario-hover: #b5121f;
+  --color-primario-activo: #9a0f1a;
+  --color-acento: #ffc233;
+  --color-acento-hover: #ffd166;
+
+  /* Estados */
+  --color-error: #ff5c66;
+  --color-exito: #4ade80;
+  --color-info: #7cc4ff;
+
+  /* Transparencias */
+  --color-fondo-header: rgb(11 11 16 / 0.92);
+  --color-velo-modal: rgb(0 0 0 / 0.7);
+  --color-velo-primario: rgb(209 26 42 / 0.25);
+  --color-sombra-texto: rgb(0 0 0 / 0.6);
+  --color-velo-banner: rgb(11 11 16 / 0.85);
+  --color-velo-banner-suave: rgb(11 11 16 / 0.35);
+
+  /* Bordes */
+  --color-borde: #34343f;
+  --color-borde-control: #6b6b78;
+  --color-foco: #ffc233;
+
+  /* Paletas de los pósters ilustrados (decorativos: el título real va como texto aparte) */
+  --poster-1-a: #1b2a6b;
+  --poster-1-b: #07091c;
+  --poster-1-c: #ffb547;
+  --poster-2-a: #6b1b3a;
+  --poster-2-b: #12060c;
+  --poster-2-c: #ff7a90;
+  --poster-3-a: #0f5a52;
+  --poster-3-b: #041714;
+  --poster-3-c: #8ef0d0;
+  --poster-4-a: #7a4a0c;
+  --poster-4-b: #1a0f03;
+  --poster-4-c: #ffd88a;
+  --poster-5-a: #3d1f6e;
+  --poster-5-b: #0c0618;
+  --poster-5-c: #c9a6ff;
+  --poster-6-a: #0f3d66;
+  --poster-6-b: #030c16;
+  --poster-6-c: #7cc4ff;
+  --poster-7-a: #6e2a12;
+  --poster-7-b: #160803;
+  --poster-7-c: #ff9b5e;
+  --poster-8-a: #2a4d1a;
+  --poster-8-b: #071204;
+  --poster-8-c: #c3f08a;
+
+  /* Tipografía */
+  --fuente-display: 'Bebas Neue', 'Arial Narrow', Impact, sans-serif;
+  --fuente-texto: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --texto-xs: 0.8125rem;
+  --texto-sm: 0.875rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.125rem;
+  --texto-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --titulo-sm: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+  --titulo-md: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+  --titulo-lg: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+
+  /* Espaciado */
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-5: 1.5rem;
+  --espacio-6: 2rem;
+  --espacio-7: 3rem;
+  --espacio-8: 4rem;
+
+  /* Radios */
+  --radio-sm: 6px;
+  --radio-md: 10px;
+  --radio-lg: 16px;
+  --radio-pill: 999px;
+
+  /* Sombras */
+  --sombra-1: 0 2px 8px rgb(0 0 0 / 0.35);
+  --sombra-2: 0 10px 30px rgb(0 0 0 / 0.5);
+
+  /* Capas */
+  --z-header: 100;
+  --z-barra-fija: 200;
+  --z-toast: 400;
+
+  /* Layout */
+  --ancho-max: 1200px;
+  --gutter: var(--espacio-4);
+  --alto-header: 64px;
+  --area-tactil: 44px;
+
+  --transicion: 150ms ease;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: var(--espacio-5);
+  }
+}

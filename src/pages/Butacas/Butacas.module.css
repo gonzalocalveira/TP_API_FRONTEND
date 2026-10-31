@@ -1,0 +1,17 @@
+.cambiar {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--area-tactil);
+  font-weight: 600;
+}
+
+.instrucciones {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.ayuda {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-xs);
+  text-align: center;
+}
